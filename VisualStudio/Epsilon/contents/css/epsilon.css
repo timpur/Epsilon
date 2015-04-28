@@ -1,26 +1,68 @@
 ﻿html {
-    height: 100%;
-    width: 100%;
+    min-height: 100%;
+    min-width: 100%;
 }
 
 body {
-    height: 100%;
-    width: 100%;
+    min-height: 100%;
+    min-width: 100%;
     background-color: rgb(0,153,153);
-    background-image: url('http://www.funology.com/wp-content/uploads/bgrnd10.png');
+    /*background-image: url('http://www.funology.com/wp-content/uploads/bgrnd10.png');*/
+    background-image: url("/contents/images/background.png");
+    background-size:100%;
+}
+
+body.databody {
+    background-image:none;
+    background-color:white;
 }
 
 div, img {
     border-radius: 10px;
 }
 
-#staticImages {
-    border: rgb(0,204,204) solid;
-    margin-bottom: 30px;
+.modal-header-success {
+    color:#fff;
+    padding:9px 15px;
+    border-bottom:1px solid #eee;
+    background-color: #5cb85c;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
 }
 
+#titleDiv {
+    width: 100%;
+    text-align: center;
+    font-size: 74px;
+    font-family: cursive;
+    color: cornsilk;
+}
+
+#staticImages {
+    border: rgb(0,204,204) solid;
+    background-color: rgb(0,204,204);
+}
+
+#nav{
+
+    width: 100%;
+    text-align: center;
+    font-size: 37px;
+    font-family: cursive;
+    color: cornflowerblue;
+   
+}
+#nav a{
+    width:250px;
+}
+
+
 #mainContainer {
-    margin-top: 175px;
+    margin-top: 50px;
 }
 
 .imageHolder {
@@ -30,6 +72,11 @@ div, img {
     margin-right:auto;
     background: darkslategray;
 }
+
+.draggable.imageHolder {
+    margin-top: 20px;
+}
+
 .imageHolder .img {
     height:100%;
     width:100%;
@@ -42,7 +89,8 @@ img.toyImage {
     height: 100%;
 }
 
-
-.margin-top-10{
-    margin-top:10px;
+#NavScreen{
+    position:fixed;
+    top:10px;
+    left:10px;
 }

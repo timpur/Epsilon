@@ -252,16 +252,17 @@ function OrderImages(rootScope) {
     rootImages = rootScope.rootImages;
     if (SubLevel) {
         switch (String(SubLevel.Name).toUpperCase()) {
-            case "A": //level 1A shift images to the left
+            case "A": //level 2A shift images to the left
                 temp = order.shift();
                 order.push(temp);
                 break;
-            case "B": //level 1B shift images to the right
+            case "B": //level 2B shift images to the right
+            default: //there is no level 2C so 2B is also the default-one
                 temp = order.pop();
                 order.unshift(temp);
                 break;
-            default://level 1C reverse order
-                order.reverse();
+            //default://level 2C reverse order (there is no level 2C for now)
+            //    order.reverse();
         }
     }
     //create array of images on the specified order

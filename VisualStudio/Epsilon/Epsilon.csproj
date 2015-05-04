@@ -91,6 +91,7 @@
     <Content Include="contents\js\jquery-2.1.3.min.js" />
     <Content Include="contents\js\jquery-ui.min.js" />
     <Content Include="contents\js\jquery.ui.touch-punch.min.js" />
+    <Content Include="contents\js\Level2.js" />
     <Content Include="index.html" />
     <Content Include="level1.html" />
     <Content Include="intro-form.html" />

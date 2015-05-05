@@ -40,32 +40,32 @@
         </div>
     </div>
     <div id="titleDiv">Level {{level}}</div>
-    <div id="content" class="container">
-        <div class="row">
-            <div class="col-xs-3">
-                <div id="NumControler" ng-controller="NumControler">
-                    <form>
-                        <div id="inputs" ng-repeat="input in inputs">
-                            <h4>Movement {{$index + 1}}</h4>
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    <label for="select" class="col-sm-6 control-label">Move Image: </label>
-                                    <div class="col-sm-6">
-                                        <input type="number" class="form-control input-sm" id="select" placeholder="Image Number" ng-model="input.select">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="to" class="col-sm-6 control-label">To Location: </label>
-                                    <div class="col-sm-6">
-                                        <input type="number" class="form-control input-sm" id="to" placeholder="Location Number" ng-model="input.to">
-                                    </div>
-                                </div>
+    <div class="col-xs-3">
+        <div id="NumControler" ng-controller="NumControler">
+            <form>
+                <div id="inputs" ng-repeat="input in inputs">
+                    <h4>Movement {{$index + 1}}</h4>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="select" class="col-sm-6 control-label">Move Image: </label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control input-sm" id="select" placeholder="Image Number" ng-model="input.select">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-lg btn-block" ng-click="Go()">Go</button>
-                    </form>
+                        <div class="form-group">
+                            <label for="to" class="col-sm-6 control-label">To Location: </label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control input-sm" id="to" placeholder="Location Number" ng-model="input.to">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <button type="submit" class="btn btn-success btn-lg btn-block" ng-click="Go()">Go</button>
+            </form>
+        </div>
+    </div>
+    <div id="content" class="container">
+        <div class="row">
             <div class="col-xs-9">
                 <div id="staticImages" ng-controller="staticImages">
                     <div class="row">

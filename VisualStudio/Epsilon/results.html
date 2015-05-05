@@ -18,48 +18,74 @@
 </head>
 <body ng-app="results" ng-controller="mainController" class="databody">
     <div class="container">
-        <div>
-            <h1>Data recorded in this session</h1>
-            <h3>Session:</h3>
-            <ul>
-                <li>ID: {{session.ID}}</li>
-                <li>Date: {{session.Date}}</li>
-                <li>Child ID: {{session.Child.ID}}</li>
-                <li>Child Age: {{session.Child.Date}}</li>
-            </ul>
+        <div class="jumbotron">
+            <h1 class="text-center">Data recorded in this session</h1>
+            <p>
+                This is the data being recorded in the background while the kid plays with the application.
+                It will be sent via email as text or Excel format for further analysis.
+            </p>
         </div>
-        <div ng-repeat="level in session.Levels">
-            <div ng-repeat="sublevel in level.SubLevels">
-                <h3>{{level.Name}} {{sublevel.Name}}</h3>
+        <a href="index.html" class="btn btn-primary">Go to Menu</a>
+        <p><br /></p>
+        <div class="panel panel-success">
+            <div class="panel-heading">Session:</div>
+            <div class="panel-body">
                 <ul>
-                    <li>Start Time: {{sublevel.StartTime}}</li>
-                    <li>End Time: {{sublevel.EndTime}}</li>
-                    <li>Success: <span ng-if="sublevel.Success">Yes</span> <span ng-if="!sublevel.Success">No</span></li>
+                    <li>Session ID: {{session.ID}}</li>
+                    <li>Supervisor ID: {{session.Supervisor.ID}}</li>
+                    <li>Child ID: {{session.Child.ID}}</li>
+                    <li>Child Age: {{session.Child.Age}}</li>
+                    <li>Date: {{session.Date | date}}</li>
                 </ul>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Image ID</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Start</th>
-                            <th>End</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="movement in sublevel.Movements">
-                            <td>{{$index}}</td>
-                            <td>{{movement.ImageID}}</td>
-                            <td>{{movement.From}}</td>
-                            <td>{{movement.Too}}</td>
-                            <td>{{movement.StartTime}}</td>
-                            <td>{{movement.EndTime}}</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
+        <div ng-repeat="level in session.Levels">
+            <div class="panel panel-success">
+                <div class="panel-heading">{{level.Name}}</div>
+                <div class="panel-body">
+                    <div ng-repeat="sublevel in level.SubLevels">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">Sublevel {{sublevel.Name}}</div>
+                            <div class="panel-body">
+                                <ul>
+                                    <li>Start Time: {{sublevel.StartTime | date:'h:mm:ss a'}}</li>
+                                    <li>End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}</li>
+                                    <li>Success: <span ng-if="sublevel.Success">Yes</span> <span ng-if="!sublevel.Success">No</span></li>
+                                </ul>
+                                <h3><small>Movements:</small></h3>
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Move Number</th>
+                                            <th>Image ID</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Movement Outcome</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th>Time Taken</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="movement in sublevel.Movements">
+                                            <td>{{$index + 1}}</td>
+                                            <td>{{movement.ImageID}}</td>
+                                            <td>{{movement.From}}</td>
+                                            <td>{{movement.Too}}</td>
+                                            <td>{{movement.Failed? "Success":"Fail"}}</td>
+                                            <td>{{movement.StartTime | date:'h:mm:ss:sss a'}}</td>
+                                            <td>{{movement.EndTime | date:'h:mm:ss:sss a'}}</td>
+                                            <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="index.html" class="btn btn-primary">Go to Menu</a>
     </div>
 </body>
 </html>

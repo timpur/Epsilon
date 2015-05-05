@@ -4,15 +4,21 @@ c:\users\timothy.tpf\documents\visual studio 2013\Projects\Epsilon\Epsilon\bin\E
 c:\users\timothy.tpf\documents\visual studio 2013\Projects\Epsilon\Epsilon\obj\Debug\Epsilon.csprojResolveAssemblyReference.cache
 c:\users\timothy.tpf\documents\visual studio 2013\Projects\Epsilon\Epsilon\obj\Debug\Epsilon.dll
 c:\users\timothy.tpf\documents\visual studio 2013\Projects\Epsilon\Epsilon\obj\Debug\Epsilon.pdb
-C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll.config
-C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll
-C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.pdb
-C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.dll
-C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.pdb
-C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.csprojResolveAssemblyReference.cache
 C:\Users\timothy.TPF\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll.config
 C:\Users\timothy.TPF\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll
 C:\Users\timothy.TPF\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.pdb
 C:\Users\timothy.TPF\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.csprojResolveAssemblyReference.cache
 C:\Users\timothy.TPF\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.dll
 C:\Users\timothy.TPF\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.pdb
+C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll.config
+C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll
+C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.pdb
+C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.dll
+C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.pdb
+C:\Users\Juan\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.csprojResolveAssemblyReference.cache
+C:\Users\Edward\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll.config
+C:\Users\Edward\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.dll
+C:\Users\Edward\Documents\GitHub\Epsilon\VisualStudio\Epsilon\bin\Epsilon.pdb
+C:\Users\Edward\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.csprojResolveAssemblyReference.cache
+C:\Users\Edward\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.dll
+C:\Users\Edward\Documents\GitHub\Epsilon\VisualStudio\Epsilon\obj\Debug\Epsilon.pdb

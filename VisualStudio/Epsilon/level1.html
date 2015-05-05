@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Epsilon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="contents/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="contents/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="contents/css/jquery-ui.structure.min.css" rel="stylesheet" />
+    <link href="contents/css/jquery-ui.theme.css" rel="stylesheet" />
+    <link href="contents/css/epsilon.css" rel="stylesheet" />
+
+    <script src="contents/js/jquery-2.1.3.min.js"></script>
+    <script src="contents/js/jquery-ui.min.js"></script>
+    <script src="contents/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="contents/js/bootstrap.min.js"></script>
+    <script src="contents/js/angular.min.js"></script>
+    <script src="contents/js/angular-dragdrop.min.js"></script>
+    <script src="contents/js/epsilon.js"></script>
+    <script src="contents/js/level1.js"></script>
+</head>
+<body ng-app="epsilon" ng-controller="mainController">
+    <div id="NavScreen">
+        <a class="btn btn-primary" href="index.html" onclick="SaveSubLevel(false)">Go to Menu</a>
+    </div>
+    <div class="modal fade" id="theModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-success">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-center" id="myModalLabel"><i class="glyphicon glyphicon-thumbs-up"></i> Congratulations!</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <h3 id="modalContent">level {{level}} completed</h3>
+                    <p>{{randomMessage}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="titleDiv">Level {{level}}</div>
+    <div id="mainContainer">
+        <div id="nav">
+
+        </div>
+        <div id="content" ng-controller="content">
+            <div class="container">
+                <div id="staticImages" ng-controller="staticImages">
+                    <div class="row">
+                        <div ng-repeat="image in images" class="col-xs-4">
+                            <div class="imageHolder">
+                                <img class="toyImage" ng-src="{{image.src}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dragableImages" ng-controller="dragableImages">
+                    <div class="row">
+                        <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
+                        <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-md-offset-4':$last}">
+                            <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
+                            <div class="draggable imageHolder" data-drop="true" jqyoui-droppable="{onDrop:'onDrop'}" ng-model="image" data-index="{{$index}}" data-jqyoui-options="{disabled:{{image.isImage?true:false}}}">
+                                <!-- this is a element that is dragable. it doesnt show if "image.isImage" doesnt exist -->
+                                <div class="img" ng-model="image" data-drag="true" jqyoui-draggable="{onStart:'onStart',onStop:'onStop'}" ng-hide="!image.isImage" data-index="{{image.index}}" data-jqyoui-options="{ revert: 'invalid', containment:'body'}">
+                                    <!--{{image.index}}
+                                    <br />
+                                    {{image.history}}
+                                     this is where the image would go:
+                                        it would look something like this
+                                        since the "image" object contains an property that is called src
+                                        it has been copied from the root images
+                                    <br />image: {{image.src}}
+                                    -->
+                                    <img class="toyImage" ng-src="{{image.src}}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

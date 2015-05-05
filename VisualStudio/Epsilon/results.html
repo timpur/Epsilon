@@ -56,7 +56,7 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Move Number</th>
                                             <th>Image ID</th>
                                             <th>From</th>
                                             <th>To</th>
@@ -68,7 +68,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="movement in sublevel.Movements">
-                                            <td>{{$index}}</td>
+                                            <td>{{$index + 1}}</td>
                                             <td>{{movement.ImageID}}</td>
                                             <td>{{movement.From}}</td>
                                             <td>{{movement.Too}}</td>

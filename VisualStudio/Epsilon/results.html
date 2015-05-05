@@ -60,7 +60,7 @@
                                             <th>Image ID</th>
                                             <th>From</th>
                                             <th>To</th>
-                                            <th>Movement Failed?</th>
+                                            <th>Movement Outcome</th>
                                             <th>Start</th>
                                             <th>End</th>
                                             <th>Time Taken</th>
@@ -72,7 +72,7 @@
                                             <td>{{movement.ImageID}}</td>
                                             <td>{{movement.From}}</td>
                                             <td>{{movement.Too}}</td>
-                                            <td>{{movement.Failed? "Yes":"No"}}</td>
+                                            <td>{{movement.Failed? "Success":"Fail"}}</td>
                                             <td>{{movement.StartTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{movement.EndTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds</td>

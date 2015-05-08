@@ -47,6 +47,8 @@
                         <div class="panel panel-success">
                             <div class="panel-heading">Sublevel {{sublevel.Name}}</div>
                             <div class="panel-body">
+                                <a href="replay.html?levelid={{sublevel.ID}}" class="btn btn-primary">Replay</a>
+                                <p>sublevel id: {{sublevel.ID}}</p>
                                 <ul>
                                     <li>Start Time: {{sublevel.StartTime | date:'h:mm:ss a'}}</li>
                                     <li>End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}</li>
@@ -60,6 +62,7 @@
                                             <th>Image ID</th>
                                             <th>From</th>
                                             <th>To</th>
+                                            <th>Movement Failed?</th>
                                             <th>Start</th>
                                             <th>End</th>
                                             <th>Time Taken</th>
@@ -71,6 +74,7 @@
                                             <td>{{movement.ImageID}}</td>
                                             <td>{{movement.From}}</td>
                                             <td>{{movement.Too}}</td>
+                                            <td>{{movement.Failed? "Yes":"No"}}</td>
                                             <td>{{movement.StartTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{movement.EndTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds</td>

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <title>Epsilon</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,9 +16,82 @@
     <script src="contents/js/angular.min.js"></script>
     <script src="contents/js/angular-dragdrop.min.js"></script>
     <script src="contents/js/epsilon.js"></script>
-    <script src="contents/js/epsilonAngular.js"></script>
+    <script src="contents/js/Level2.js"></script>
 </head>
-<body>
-
+<body ng-app="epsilon" ng-controller="mainController">
+    <div id="NavScreen">
+        <a class="btn btn-primary" href="index.html" onclick="SaveSubLevel(false)">Go to Menu</a>
+    </div>
+    <div class="modal fade" id="theModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-success">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-center" id="myModalLabel"><i class="glyphicon glyphicon-thumbs-up"></i> Congratulations!</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <h3 id="modalContent">level {{level}} completed</h3>
+                    <p>{{randomMessage}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="titleDiv">Level {{level}}</div>
+    <div class="col-xs-3">
+        <div id="NumControler" ng-controller="NumControler">
+            <form>
+                <div id="inputs" ng-repeat="input in inputs">
+                    <h4>Movement {{$index + 1}}</h4>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="select" class="col-sm-6 control-label">Move Image: </label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control input-sm" id="select" placeholder="Image Number" ng-model="input.select">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="to" class="col-sm-6 control-label">To Location: </label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control input-sm" id="to" placeholder="Location Number" ng-model="input.to">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg btn-block" ng-click="Go()">Go</button>
+            </form>
+        </div>
+    </div>
+    <div id="content" class="container">
+        <div class="row">
+            <div class="col-xs-9">
+                <div id="staticImages" ng-controller="staticImages">
+                    <div class="row">
+                        <div ng-repeat="image in images" class="col-xs-4">
+                            <div class="imageHolder">
+                                <img class="toyImage" ng-src="{{image.src}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="moveImages" ng-controller="moveImages">
+                    <div class="row">
+                        <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
+                        <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}">
+                            <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
+                            <div class="imageHolder">
+                                <!-- this is a element that is dragable. it doesnt show if "image.isImage" doesnt exist -->
+                                <div class="img" ng-hide="!image.isImage">
+                                    <img class="toyImage" ng-src="{{image.src}}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -98,10 +98,25 @@ img.toyImage {
     display:inline-block;
 }
 
-#NumControler{
+#NumControler {
     background-color:white;
     border-radius:10px;
     border:10px solid white;
     box-shadow:0 0 40px black;
     margin-bottom:10px;
+}
+
+#replayPanel {
+    background-color:white;
+    border-radius:10px;
+    border:10px solid white;
+    box-shadow:0 0 40px black;
+    margin-bottom:10px;
+    position: fixed;
+    z-index: 999;
+    cursor: move;
+}
+
+#replayInfo {
+    margin-bottom: 10px;
 }

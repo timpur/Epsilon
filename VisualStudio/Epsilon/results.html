@@ -47,6 +47,8 @@
                         <div class="panel panel-success">
                             <div class="panel-heading">Sublevel {{sublevel.Name}}</div>
                             <div class="panel-body">
+                                <a href="replay.html?levelid={{sublevel.ID}}" class="btn btn-primary">Replay</a>
+                                <p>sublevel id: {{sublevel.ID}}</p>
                                 <ul>
                                     <li>Start Time: {{sublevel.StartTime | date:'h:mm:ss a'}}</li>
                                     <li>End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}</li>

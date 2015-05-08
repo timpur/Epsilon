@@ -9,7 +9,8 @@
 var SubLevel = null;
 var StartTime = null;
 var EndTime = null;
-var ImageOrder;
+var ImageOrder = [];
+var DynamicImageOrder = [];
 var Sublevels = ["A", "B"]; //sublevels for level 2 (2 sublevels)
 var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3");
 var app = angular.module('epsilon', ['ngDragDrop']);
@@ -42,7 +43,8 @@ function SetUPSubLevel(Name) {
 function SaveSubLevel(Success) {
     // Add SubLevel with all movemments to Session
     EndTime = new Date() // set the end time of level now;
-    session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success);
+    var imageIds = { "static": ImageOrder, "dynamic": DynamicImageOrder };
+    session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success, imageIds);
     session.AddSubLevel(SubLevel, 2);
     session.Save();
 }
@@ -83,6 +85,7 @@ app.controller("staticImages", function ($scope, $rootScope) {
     }
     $scope.upDateImageOrder();
 });
+
 app.controller("moveImages", function ($scope, $rootScope, $filter) {
     DisplaySubLevel = function () {
         $scope.OrderImages();
@@ -158,6 +161,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
     }
 
 });
+
 app.controller("NumControler", function ($scope, $rootScope) {
     $scope.NumInputs = 0;
     $scope.inputs = [];
@@ -265,6 +269,7 @@ function OrderImages(rootScope) {
             //    order.reverse();
         }
     }
+    DynamicImageOrder = order;
     //create array of images on the specified order
     var images = [];
     for (var i = 0; i < 3; i++) {

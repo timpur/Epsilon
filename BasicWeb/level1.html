@@ -19,6 +19,9 @@
     <script src="contents/js/level1.js"></script>
 </head>
 <body ng-app="epsilon" ng-controller="mainController">
+    <div id="NavScreen">
+        <a class="btn btn-primary" href="index.html" onclick="SaveSubLevel(false)">Go to Menu</a>
+    </div>
     <div class="modal fade" id="theModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -57,7 +60,7 @@
                         <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
                         <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-md-offset-4':$last}">
                             <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
-                            <div class="draggable imageHolder"  data-drop="true" jqyoui-droppable="{onDrop:'onDrop'}" ng-model="image" data-index="{{$index}}" data-jqyoui-options="{disabled:{{image.isImage?true:false}}}">
+                            <div class="draggable imageHolder" data-drop="true" jqyoui-droppable="{onDrop:'onDrop'}" ng-model="image" data-index="{{$index}}" data-jqyoui-options="{disabled:{{image.isImage?true:false}}}">
                                 <!-- this is a element that is dragable. it doesnt show if "image.isImage" doesnt exist -->
                                 <div class="img" ng-model="image" data-drag="true" jqyoui-draggable="{onStart:'onStart',onStop:'onStop'}" ng-hide="!image.isImage" data-index="{{image.index}}" data-jqyoui-options="{ revert: 'invalid', containment:'body'}">
                                     <!--{{image.index}}

@@ -40,6 +40,7 @@ function SetUPSubLevel(Name) {
 
 function SaveSubLevel(Success) {
     // Add SubLevel with all movemments to Session
+    EndTime = new Date() // set the end time of level now;
     session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success);
     session.AddSubLevel(SubLevel, 1);
     session.Save();   
@@ -143,8 +144,7 @@ app.controller("dragableImages", function ($scope, $rootScope, $filter) {
         // Check for success by giving this order to check
         if (CheckForSuccess(order)) {
             // Success
-
-            EndTime = new Date() // set the end time of level now;
+           
             SaveSubLevel(true);
             gotToNextLevel();
         }

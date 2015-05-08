@@ -17,5 +17,17 @@ app.controller("mainController", function ($scope, $rootScope) {
     theSession.levels
 
     $scope.session = theSession;
+
+    $scope.Date = function (s) {
+        var d = new Date(s);
+        return d.valueOf();
+    };
+    $scope.TimeDiff = function (t1, t2) {
+        t1 = new Date(t1);
+        t2 = new Date(t2);
+
+        var d = t2.valueOf() - t1.valueOf();
+        return d;
+    };
 });
 

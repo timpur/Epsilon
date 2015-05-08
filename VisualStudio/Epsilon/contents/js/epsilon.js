@@ -119,13 +119,14 @@ function Session() {
     this.AddMovement = function (SubLevel , Movement) {
         SubLevel.Movements.push(Movement);
     };
-    this.CreateMovement = function (StartTime, EndTime, ImageID, From , Too) {
+    this.CreateMovement = function (StartTime, EndTime, ImageID, From , Too, Failed) {
         var Movement = {};
         Movement.StartTime = StartTime;
         Movement.EndTime = EndTime;
         Movement.ImageID = ImageID;
         Movement.From = From;
         Movement.Too = Too;
+        Movement.Failed = Failed;
         return Movement;
     };
 }

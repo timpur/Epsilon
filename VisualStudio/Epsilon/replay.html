@@ -31,14 +31,16 @@
             Child id: {{childId}}<br />
             Date: {{sessionDate}}<br />
             {{currentLevel}}<br />
-            Move {{currentMove}} of {{LastMove}}
+            Move {{currentMove}} of {{lastMove}}
         </div>
         <button type="button" id="button_bw" class="btn btn-primary btn-lg" ng-click='buttonBackPress()'>
             <i class="fa fa-backward"></i>
         </button>
+        <!--
         <button type="button" id="button_play" class="btn btn-primary btn-lg" ng-click='buttonPlayPress()'>
             <i class="fa fa-play"></i>
         </button>
+        -->
         <button type="button" id="button_fw" class="btn btn-primary btn-lg" ng-click='buttonForwardPress()'>
             <i class="fa fa-forward"></i>
         </button>
@@ -63,7 +65,7 @@
                             <div class="imageHolder">
                                 <!-- this is a element that is animated. it doesnt show if "image.isImage" doesnt exist -->
                                 <div class="img" ng-hide="!image.isImage">
-                                    <img class="toyImage" ng-src="{{image.src}}" />
+                                    <img class="toyImage animated" ng-src="{{image.src}}" />
                                 </div>
                             </div>
                         </div>

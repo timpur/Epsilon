@@ -120,3 +120,8 @@ img.toyImage {
 #replayInfo {
     margin-bottom: 10px;
 }
+
+.animated.ng-move {
+    -webkit-transition:0.5s linear all;
+    transition:0.5s linear all;
+}

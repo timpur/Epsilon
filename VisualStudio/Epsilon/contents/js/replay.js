@@ -44,7 +44,6 @@ app.controller("mainController", function ($scope, $rootScope) {
             $scope.currentLevel = getSublevelName(data2play.ID);
             $scope.currentMove = $rootScope.currentMove;
             $scope.lastMove = $rootScope.lastMove;
-            $scope.$apply();
         }
     }
 });
@@ -54,8 +53,19 @@ app.controller("replayControler", function ($scope, $rootScope) {
         var move = $rootScope.currentMove;
         var lastMove = $rootScope.lastMove;
         if (move < lastMove) {
-            playMove(move);
+            playMove(move, "forward");
             $rootScope.currentMove++;
+            SetReplayInfo();
+        }
+    }
+
+    $scope.buttonBackPress = function () {
+        var move = $rootScope.currentMove;
+        var lastMove = $rootScope.lastMove;
+        if (move > 0) {
+            move--;
+            playMove(move, "reverse");
+            $rootScope.currentMove--;
             SetReplayInfo();
         }
     }
@@ -72,19 +82,36 @@ app.controller("replayImages", function ($scope, $rootScope) {
         // push another object that is empty for the blank space
         $scope.images.push({});
     }
-    $scope.OrderImages();
+    $scope.OrderImages(); 
+
+    playMove = function (id, direction) {
+        var searchImagePos = function (id) {
+            for (var i = 0; i < $scope.images.length; i++) {
+                if ($scope.images[i].ID == id) {
+                    return i;
+                }
+            }
+        };
+        var movement = data2play.Movements[id];
+        var image = $scope.images[searchImagePos(movement.ImageID)];
+        var from = 0;
+        var to = 0;
+        if (direction == "forward") {
+            from = movement.From;
+            to = movement.Too;
+        }
+        else {
+            from = movement.Too;
+            to = movement.From;
+        }
+        image.currentLocation = to;
+        $scope.images[from - 1] = {};
+        $scope.images[to - 1] = image;
+    }
 });
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-
-function playMove(id) {
-    var movement = data2play.Movements[id];
-    var imageID = movement.ImageID;
-    var from = movement.From;
-    var to = movement.to;
-
-}
 
 //gets the id given in the url in the form "replay.html?levelid=1234" if id is 1234
 function GetURLLevelID() {

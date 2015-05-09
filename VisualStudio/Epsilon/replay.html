@@ -26,47 +26,96 @@
     </div>
     <div id="titleDiv">Replay</div>
     <div id="replayPanel" ng-controller="replayControler">
-        <h4 class="text-center">Replay Control Panel</h4>
-        <div id="replayInfo">
-            Child id: {{childId}}<br />
-            Date: {{sessionDate}}<br />
-            {{currentLevel}}<br />
-            Move {{currentMove}} of {{lastMove}}
+        <div class="modal-header modal-header-success">
+            <h4 class="modal-title text-center">Replay Control Panel</h4>
         </div>
-        <button type="button" id="button_bw" class="btn btn-primary btn-lg" ng-click='buttonBackPress()'>
-            <i class="fa fa-backward"></i>
-        </button>
-        <!--
-        <button type="button" id="button_play" class="btn btn-primary btn-lg" ng-click='buttonPlayPress()'>
-            <i class="fa fa-play"></i>
-        </button>
-        -->
-        <button type="button" id="button_fw" class="btn btn-primary btn-lg" ng-click='buttonForwardPress()'>
-            <i class="fa fa-forward"></i>
-        </button>
-    </div>
-    <div id="content" class="container">
-        <div class="row">
-            <div class="col-xs-9">
-                <div id="staticImages" ng-controller="staticImages">
-                    <div class="row">
-                        <div ng-repeat="image in images" class="col-xs-4">
-                            <div class="imageHolder">
-                                <img class="toyImage" ng-src="{{image.src}}" />
-                            </div>
+        <div class="modal-body">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default" id="panel1">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-target="#collapseOne" href="#collapseOne" class="collapsed">
+                                Child Information
+                            </a>
+                        </h4>
+
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Child ID: {{session.Child.ID}}<br />
+                            Child Age: {{session.Child.Age}}
                         </div>
                     </div>
                 </div>
-                <div id="replayImages" ng-controller="replayImages">
-                    <div class="row">
-                        <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
-                        <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}">
-                            <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
-                            <div class="imageHolder">
-                                <!-- this is a element that is animated. it doesnt show if "image.isImage" doesnt exist -->
-                                <div class="img" ng-hide="!image.isImage">
-                                    <img class="toyImage animated" ng-src="{{image.src}}" />
-                                </div>
+                <div class="panel panel-default" id="panel2">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-target="#collapseTwo" href="#collapseTwo">
+                                Level Information
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            Playing: {{currentLevel}}<br />
+                            Start Time: {{data2play.StartTime | date:'h:mm:ss a'}}<br />
+                            End Time: {{data2play.EndTime | date:'h:mm:ss a'}} <br />
+                            Success:  <span ng-if="data2play.Success">Yes</span> <span ng-if="!data2play.Success">No</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" id="panel3">
+                    <div class="panel-heading text-center">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-target="#collapseThree" href="#collapseThree" class="collapsed">
+                                Move {{currentMove}} of {{lastMove}}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            successful: {{movement.Failed? "No":"Yes"}}<br />
+                            Time taken: {{TimeDiff(movement.StartTime,movement.EndTime)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="replayButtons" class="modal-footer">
+            <button type="button" id="button_bw" class="btn btn-primary btn-lg" ng-click='buttonBackPress()'>
+                <i class="fa fa-backward"></i>
+            </button>
+            <!--
+            <button type="button" id="button_play" class="btn btn-primary btn-lg" ng-click='buttonPlayPress()'>
+                <i class="fa fa-play"></i>
+            </button>
+            -->
+            <button type="button" id="button_fw" class="btn btn-primary btn-lg" ng-click='buttonForwardPress()'>
+                <i class="fa fa-forward"></i>
+            </button>
+        </div>
+    </div>
+    <div id="content">
+        <div class="container">
+            <div id="staticImages" ng-controller="staticImages">
+                <div class="row">
+                    <div ng-repeat="image in images" class="col-xs-4">
+                        <div class="imageHolder">
+                            <img class="toyImage" ng-src="{{image.src}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="replayImages" ng-controller="replayImages">
+                <div class="row">
+                    <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
+                    <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}">
+                        <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
+                        <div id="holderid{{$index}}" class="imageHolder">
+                            <!-- this is a element that is animated. it doesnt show if "image.isImage" doesnt exist -->
+                            <div class="img" ng-hide="!image.isImage">
+                                <img id="imgid{{$index}}" class="toyImage" ng-src="{{image.src}}" />
                             </div>
                         </div>
                     </div>

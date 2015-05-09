@@ -11,8 +11,10 @@
 
     <script src="contents/js/jquery-2.1.3.min.js"></script>
     <script src="contents/js/jquery-ui.min.js"></script>
+    <script src="contents/js/jquery.ui.touch-punch.min.js"></script>
     <script src="contents/js/bootstrap.min.js"></script>
     <script src="contents/js/angular.min.js"></script>
+    <script src="contents/js/angular-dragdrop.min.js"></script>
     <script src="contents/js/epsilon.js"></script>
     <script src="contents/js/results.js"></script>
 </head>
@@ -47,13 +49,12 @@
                         <div class="panel panel-success">
                             <div class="panel-heading">Sublevel {{sublevel.Name}}</div>
                             <div class="panel-body">
-                                <a href="replay.html?levelid={{sublevel.ID}}" class="btn btn-primary">Replay</a>
-                                <p>sublevel id: {{sublevel.ID}}</p>
                                 <ul>
                                     <li>Start Time: {{sublevel.StartTime | date:'h:mm:ss a'}}</li>
                                     <li>End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}</li>
                                     <li>Success: <span ng-if="sublevel.Success">Yes</span> <span ng-if="!sublevel.Success">No</span></li>
                                 </ul>
+                                <a href="replay.html?levelid={{sublevel.ID}}" class="btn btn-primary">Replay</a>
                                 <h3><small>Movements:</small></h3>
                                 <table class="table table-bordered table-hover">
                                     <thead>

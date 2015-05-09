@@ -10,8 +10,8 @@ var app = angular.module('replay', []);
 var theSession;
 
 $(document).ready(function () {
-    SetReplayInfo();//set the replay info from the session (child id, date, ...) 
     $("#replayPanel").draggable();
+    SetReplayInfo(true);//set the replay info from the session (child id, date, ...) 
 });
 
 
@@ -37,18 +37,33 @@ app.run(function ($rootScope) {
 });
 
 app.controller("mainController", function ($scope, $rootScope) {
-    SetReplayInfo = function () {
-        if (theSession) {
-            $scope.childId = theSession.Child.ID;
-            $scope.sessionDate = data2play.StartTime;
-            $scope.currentLevel = getSublevelName(data2play.ID);
-            $scope.currentMove = $rootScope.currentMove;
-            $scope.lastMove = $rootScope.lastMove;
-        }
-    }
+   
 });
 
 app.controller("replayControler", function ($scope, $rootScope) {
+    SetReplayInfo = function (apply) {
+        if (theSession) {
+            $scope.session = theSession
+            $scope.data2play = data2play;
+            $scope.currentLevel = getSublevelName(data2play.ID);
+            $scope.currentMove = $rootScope.currentMove;
+            $scope.lastMove = $rootScope.lastMove;
+            $scope.movement = data2play.Movements[$scope.currentMove];
+            $scope.TimeDiff = function (t1, t2) {
+                if (t1 && t2) {
+                    t1 = new Date(t1);
+                    t2 = new Date(t2);
+
+                    var d = t2.valueOf() - t1.valueOf();
+                    return d + "Milliseconds";
+                }
+                return "N/A";
+            };
+            if (apply) { //this is to prevent an error thrown when function called after first time.
+                $scope.$apply();
+            }
+        }
+    }
     $scope.buttonForwardPress = function () {
         var move = $rootScope.currentMove;
         var lastMove = $rootScope.lastMove;

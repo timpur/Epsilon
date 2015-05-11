@@ -59,11 +59,11 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Move Number</th>
                                             <th>Image ID</th>
                                             <th>From</th>
                                             <th>To</th>
-                                            <th>Movement Failed?</th>
+                                            <th>Movement Outcome</th>
                                             <th>Start</th>
                                             <th>End</th>
                                             <th>Time Taken</th>
@@ -71,11 +71,11 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="movement in sublevel.Movements">
-                                            <td>{{$index}}</td>
+                                            <td>{{$index + 1}}</td>
                                             <td>{{movement.ImageID}}</td>
                                             <td>{{movement.From}}</td>
                                             <td>{{movement.Too}}</td>
-                                            <td>{{movement.Failed? "Yes":"No"}}</td>
+                                            <td>{{movement.Failed? "Fail":"Success"}}</td>
                                             <td>{{movement.StartTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{movement.EndTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds</td>

@@ -15,7 +15,8 @@ var Sublevels = ["A", "B"]; //sublevels for level 2 (2 sublevels)
 var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3");
 var app = angular.module('epsilon', ['ngDragDrop']);
 var randomMessages = ["WOW! You are the best player ever", "Keep it up, I'm proud of you", "You deserve a candy, go ask your mum for one", "Determination is the key to success, Good work!", "Keep up the good work", "I’m impressed of your intelligence", "That deserves an ice-cream"];
-
+var GoClicks = 0;
+var GoClicksLimit = 0;
 
 $(document).ready(function () {
     if (session.Load()) {
@@ -36,6 +37,7 @@ function GetURLSubLevelData() {
 function SetUPSubLevel(Name) {
     Name = String(Name).toUpperCase();
     SubLevel = session.CreateSubLevel(Name);
+    //Displays the Images according to the sub level and the number of inputs
     DisplaySubLevel();
     SetNumInputs();
 }
@@ -49,8 +51,8 @@ function SaveSubLevel(Success) {
     session.Save();
 }
 
-function addMovement(StartTime, ImageID, From, Too, F) {
-    session.AddMovement(SubLevel, session.CreateMovement(StartTime, (new Date()), ImageID, From, Too, F));
+function addMovement(StartTime, EndTime, ImageID, From, Too, F) {
+    session.AddMovement(SubLevel, session.CreateMovement(StartTime, EndTime, ImageID, From, Too, F));
 }
 
 app.run(function ($rootScope) {
@@ -98,14 +100,16 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
         $scope.images.push({});
     }
     $scope.OrderImages();
-
+    // function that takes a queue of movements to preform
     Movement = function (queue) {
         var FindImageBasedOffPos = function (pos) {
             return $scope.images[pos - 1];
         };
-        var moveImage = function (imagePos, to) {
+        var moveImage = function (imagePos, to, start, end) {
+            //Check if valid move and record the outcome.
+
             if (imagePos < 1 || imagePos > $scope.images.length) {
-                addMovement(new Date(), -1, imagePos, to, true);
+                addMovement(start, end, -1, imagePos, to, true);
                 return false;
             }
 
@@ -113,34 +117,37 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             var from = image.currentLocation;
 
             if (to < 1 || to > $scope.images.length) {
-                addMovement(new Date(), image.ID, from, to, true);
+                addMovement(start, end, image.ID, from, to, true);
                 return false;
             }
             
             var newPos = FindImageBasedOffPos(to);
             if (newPos.isImage != true) {
+                // Image can be moved
                 image.currentLocation = to;
                 $scope.images[imagePos - 1] = {};
                 $scope.images[to - 1] = image;
-                addMovement(new Date(), image.ID, from, to, false);
+                addMovement(start, end, image.ID, from, to, false);
                 return true;
             }
             else {
-                addMovement(new Date(), image.ID, from, to, true);
+                addMovement(start, end, image.ID, from, to, true);
                 return false;
             }
 
 
         };
+        // this is the main logic
+        // loop through the queue
         for (var i = 0 ; i < queue.length; i++) {
             var move = queue[i];
-            if (moveImage(move.image, move.to)) {
-                $scope.CheckImageOrder();
-            }
-            else {
-                alert("Move Filed");
-            }
+            //
+            if (move.start == null) move.start = new Date();
+            if (move.end == null) move.end = new Date();
+            // move an image one at a time.
+            moveImage(move.image, move.to, move.start, move.end);
         }
+        $scope.CheckImageOrder();
     }
 
     $scope.CheckImageOrder = function () {
@@ -158,6 +165,17 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             SaveSubLevel(true);
             gotToNextLevel();
         }
+        else if (GoClicks >= GoClicksLimit) {
+            // option to restart level if reached max numbers of tries
+            setTimeout(function () {
+                SaveSubLevel(false)
+                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").modal('show');
+                $("#theModal").on('hidden.bs.modal', function () {
+                    window.location = "/index.html";
+                });
+            }, 1000);
+        }
     }
 
 });
@@ -170,23 +188,44 @@ app.controller("NumControler", function ($scope, $rootScope) {
         var num = 0;
         if (SublevelNum == 0) {
             num = 1;
+            GoClicksLimit = 5;
         }
         else if (SublevelNum == 1) {
             num = 5;
+            GoClicksLimit = 1;
         }
         $scope.NumInputs = num;
         for (var i = 0; i < num; i++) {
-            $scope.inputs.push({ select: null, to: null });
+            $scope.inputs.push({ select: null, to: null, start: null, end: null });
         }
     }
     $scope.Go = function () {
+        GoClicks += 1;
+        if (StartTime == null) {
+            StartTime = new Date();
+        }
         var queue = [];
         for (var i = 0; i < $scope.inputs.length; i++) {
-            queue.push({ image: $scope.inputs[i].select, to: $scope.inputs[i].to });
+            if ($scope.inputs[i].select != null || $scope.inputs[i].to != null)
+                queue.push({
+                    image: $scope.inputs[i].select,
+                    to: $scope.inputs[i].to,
+                    start: $scope.inputs[i].start,
+                    end: $scope.inputs[i].end
+                });
             $scope.inputs[i].select = null;
             $scope.inputs[i].to = null;
+            $scope.inputs[i].start = null;
+            $scope.inputs[i].end = null;
         }
         Movement(queue);
+    }
+    $scope.onChange = function (index) {
+        if (StartTime == null) StartTime = new Date();
+        if ($scope.inputs[index].start == null) $scope.inputs[index].start = new Date();
+        if (index > 0) {
+            if ($scope.inputs[index - 1].end == null) $scope.inputs[index - 1].end = new Date();
+        }
     }
 });
 

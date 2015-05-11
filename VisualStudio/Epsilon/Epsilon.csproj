@@ -97,6 +97,8 @@
     <Content Include="intro-form.html" />
     <Content Include="Level2.html" />
     <Content Include="NewForm.html" />
+    <Content Include="replay.html" />
+    <Content Include="contents\js\replay.js" />
     <Content Include="results.html" />
     <Content Include="contents\js\results.js" />
     <Content Include="Web.config" />

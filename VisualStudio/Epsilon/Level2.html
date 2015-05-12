@@ -84,6 +84,7 @@
                         <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}">
                             <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
                             <div class="imageHolder">
+                                <div id="circle" class="text-center">{{$index + 1}}</div>
                                 <!-- this is a element that is dragable. it doesnt show if "image.isImage" doesnt exist -->
                                 <div class="img" ng-hide="!image.isImage">
                                     <img class="toyImage" ng-src="{{image.src}}" />

@@ -55,7 +55,7 @@ app.controller("replayControler", function ($scope, $rootScope) {
                     t2 = new Date(t2);
 
                     var d = t2.valueOf() - t1.valueOf();
-                    return d + "Milliseconds";
+                    return d + " Milliseconds";
                 }
                 return "N/A";
             };
@@ -108,20 +108,22 @@ app.controller("replayImages", function ($scope, $rootScope) {
             }
         };
         var movement = data2play.Movements[id];
-        var image = $scope.images[searchImagePos(movement.ImageID)];
-        var from = 0;
-        var to = 0;
-        if (direction == "forward") {
-            from = movement.From;
-            to = movement.Too;
+        if (!movement.Failed) {
+            var image = $scope.images[searchImagePos(movement.ImageID)];
+            var from = 0;
+            var to = 0;
+            if (direction == "forward") {
+                from = movement.From;
+                to = movement.Too;
+            }
+            else {
+                from = movement.Too;
+                to = movement.From;
+            }
+            image.currentLocation = to;
+            $scope.images[from - 1] = {};
+            $scope.images[to - 1] = image;
         }
-        else {
-            from = movement.Too;
-            to = movement.From;
-        }
-        image.currentLocation = to;
-        $scope.images[from - 1] = {};
-        $scope.images[to - 1] = image;
     }
 });
 

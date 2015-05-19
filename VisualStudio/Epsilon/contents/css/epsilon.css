@@ -9,30 +9,30 @@ body {
     background-color: rgb(0,153,153);
     /*background-image: url('http://www.funology.com/wp-content/uploads/bgrnd10.png');*/
     background-image: url("/contents/images/background.png");
-    background-size:100%;
-    position:absolute;
+    background-size: 100%;
+    position: absolute;
 }
 
-body.databody {
-    background-image:none;
-    background-color:white;
-}
+    body.databody {
+        background-image: none;
+        background-color: white;
+    }
 
 div, img {
     border-radius: 10px;
 }
 
 .modal-header-success {
-    color:#fff;
-    padding:9px 15px;
-    border-bottom:1px solid #eee;
+    color: #fff;
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
     background-color: #5cb85c;
     -webkit-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
-     border-top-left-radius: 5px;
-     border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 #titleDiv {
@@ -48,18 +48,17 @@ div, img {
     background-color: rgb(0,204,204);
 }
 
-#nav{
-
+#nav {
     width: 100%;
     text-align: center;
     font-size: 37px;
     font-family: cursive;
     color: cornflowerblue;
-   
 }
-#nav a{
-    width:250px;
-}
+
+    #nav a {
+        width: 250px;
+    }
 
 
 #mainContainer {
@@ -69,8 +68,10 @@ div, img {
 .imageHolder {
     height: 22vh;
     width: 27vh;
-    margin-left:auto;
-    margin-right:auto;
+    min-height: 100px;
+    min-width: 123px;
+    margin-left: auto;
+    margin-right: auto;
     background: darkslategray;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -80,38 +81,38 @@ div, img {
 }
 
 .imageHolder .img {
-    height:100%;
-    width:100%;
-    background:gray;
-    border: blue solid
+    height: 100%;
+    width: 100%;
+    background: gray;
+    border: blue solid;
 }
 
 img.toyImage {
-    width:100%;
+    width: 100%;
     height: 100%;
 }
 
-#NavScreen{
-    position:absolute;
-    top:10px;
-    left:10px;
-    display:inline-block;
+#NavScreen {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: inline-block;
 }
 
 #NumControler {
-    background-color:white;
-    border-radius:10px;
-    border:10px solid white;
-    box-shadow:0 0 40px black;
-    margin-bottom:10px;
+    background-color: white;
+    border-radius: 10px;
+    border: 10px solid white;
+    box-shadow: 0 0 40px black;
+    margin-bottom: 10px;
 }
 
 #replayPanel {
-    background-color:white;
-    border-radius:10px;
-    border:10px solid white;
-    box-shadow:0 0 40px black;
-    margin-bottom:10px;
+    background-color: white;
+    border-radius: 10px;
+    border: 10px solid white;
+    box-shadow: 0 0 40px black;
+    margin-bottom: 10px;
     position: fixed;
     z-index: 999;
     cursor: move;
@@ -122,27 +123,692 @@ img.toyImage {
 }
 
 #replayButtons {
-    text-align:center;
+    text-align: center;
 }
 
 .panel-heading a:after {
-    font-family:'Glyphicons Halflings';
-    content:"\e114";
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
     float: right;
     color: grey;
 }
+
 .panel-heading a.collapsed:after {
-    content:"\e080";
+    content: "\e080";
 }
 
 #circle {
-    position:absolute;
+    position: absolute;
     width: 20px;
     height: 20px;
-    font-size:15px;
+    font-size: 15px;
     background: black;
-    color:white; 
-    -moz-border-radius: 10px; 
-    -webkit-border-radius: 10px; 
+    color: white;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
     border-radius: 10px;
+}
+
+.move1-2 {
+    left: 33.3333333%;
+    top: 0;
+}
+
+
+
+
+
+
+/* Animations */
+@keyframes Move1-2 {
+    from {
+        left: -33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move1-2 {
+    from {
+        left: -33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move1-2 {
+    from {
+        left: -33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move2-1 {
+    from {
+        left: 33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move2-1 {
+    from {
+        left: 33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move2-1 {
+    from {
+        left: 33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move2-3 {
+    from {
+        left: -33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move2-3 {
+    from {
+        left: -33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move2-3 {
+    from {
+        left: -33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move3-2 {
+    from {
+        left: 33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move3-2 {
+    from {
+        left: 33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move3-2 {
+    from {
+        left: 33.3333333%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move1-3 {
+    from {
+        left: -66.6666666%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move1-3 {
+    from {
+        left: -66.6666666%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move1-3 {
+    from {
+        left: -66.6666666%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move3-1 {
+    from {
+        left: 66.6666666%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move3-1 {
+    from {
+        left: 66.6666666%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move3-1 {
+    from {
+        left: 66.6666666%;
+        top: 0;
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move1-4 {
+    from {
+        left: -33.33333%;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@-webkit-keyframes Move1-4 {
+    from {
+        left: -33.33333%;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@-moz-keyframes Move1-4 {
+    from {
+        left: -33.33333%;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@keyframes Move4-1 {
+    from {
+        left: 33.33333%;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move4-1 {
+    from {
+        left: 33.33333%;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move4-1 {
+    from {
+        left: 33.33333%;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move2-4 {
+    from {
+        left: 0;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@-webkit-keyframes Move2-4 {
+    from {
+        left: 0;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@-moz-keyframes Move2-4 {
+    from {
+        left: 0;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@keyframes Move4-2 {
+    from {
+        left: 0;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move4-2 {
+    from {
+        left: 0;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move4-2 {
+    from {
+        left: 0;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@keyframes Move3-4 {
+    from {
+        left: 33.33333%;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@-webkit-keyframes Move3-4 {
+    from {
+        left: 33.33333%;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@-moz-keyframes Move3-4 {
+    from {
+        left: 33.33333%;
+        bottom: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        bottom: 0;
+    }
+}
+
+@keyframes Move4-3 {
+    from {
+        left: -33.33333%;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-webkit-keyframes Move4-3 {
+    from {
+        left: -33.33333%;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+@-moz-keyframes Move4-3 {
+    from {
+        left: -33.33333%;
+        top: calc(22vh + 20px);
+    }
+
+    to {
+        left: 0;
+        top: 0;
+    }
+}
+
+
+/* When the Screen is small and 22vh is = to 100px */
+@media(max-height: 454.545px) {
+
+    @keyframes Move1-4 {
+        from {
+            left: -33.33333%;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @-webkit-keyframes Move1-4 {
+        from {
+            left: -33.33333%;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @-moz-keyframes Move1-4 {
+        from {
+            left: -33.33333%;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @keyframes Move4-1 {
+        from {
+            left: 33.33333%;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @-webkit-keyframes Move4-1 {
+        from {
+            left: 33.33333%;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @-moz-keyframes Move4-1 {
+        from {
+            left: 33.33333%;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @keyframes Move2-4 {
+        from {
+            left: 0;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @-webkit-keyframes Move2-4 {
+        from {
+            left: 0;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @-moz-keyframes Move2-4 {
+        from {
+            left: 0;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @keyframes Move4-2 {
+        from {
+            left: 0;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @-webkit-keyframes Move4-2 {
+        from {
+            left: 0;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @-moz-keyframes Move4-2 {
+        from {
+            left: 0;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @keyframes Move3-4 {
+        from {
+            left: 33.33333%;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @-webkit-keyframes Move3-4 {
+        from {
+            left: 33.33333%;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @-moz-keyframes Move3-4 {
+        from {
+            left: 33.33333%;
+            bottom: 120px;
+        }
+
+        to {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @keyframes Move4-3 {
+        from {
+            left: -33.33333%;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @-webkit-keyframes Move4-3 {
+        from {
+            left: -33.33333%;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
+
+    @-moz-keyframes Move4-3 {
+        from {
+            left: -33.33333%;
+            top: 120px;
+        }
+
+        to {
+            left: 0;
+            top: 0;
+        }
+    }
 }

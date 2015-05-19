@@ -11,8 +11,10 @@
 
     <script src="contents/js/jquery-2.1.3.min.js"></script>
     <script src="contents/js/jquery-ui.min.js"></script>
+    <script src="contents/js/jquery.ui.touch-punch.min.js"></script>
     <script src="contents/js/bootstrap.min.js"></script>
     <script src="contents/js/angular.min.js"></script>
+    <script src="contents/js/angular-dragdrop.min.js"></script>
     <script src="contents/js/epsilon.js"></script>
     <script src="contents/js/results.js"></script>
 </head>
@@ -52,14 +54,16 @@
                                     <li>End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}</li>
                                     <li>Success: <span ng-if="sublevel.Success">Yes</span> <span ng-if="!sublevel.Success">No</span></li>
                                 </ul>
+                                <a href="replay.html?levelid={{sublevel.ID}}" class="btn btn-primary">Replay</a>
                                 <h3><small>Movements:</small></h3>
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Move Number</th>
                                             <th>Image ID</th>
                                             <th>From</th>
                                             <th>To</th>
+                                            <th>Movement Outcome</th>
                                             <th>Start</th>
                                             <th>End</th>
                                             <th>Time Taken</th>
@@ -67,10 +71,11 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="movement in sublevel.Movements">
-                                            <td>{{$index}}</td>
+                                            <td>{{$index + 1}}</td>
                                             <td>{{movement.ImageID}}</td>
                                             <td>{{movement.From}}</td>
                                             <td>{{movement.Too}}</td>
+                                            <td>{{movement.Failed? "Fail":"Success"}}</td>
                                             <td>{{movement.StartTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{movement.EndTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds</td>

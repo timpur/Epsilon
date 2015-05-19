@@ -121,7 +121,10 @@ app.controller("replayImages", function ($scope, $rootScope) {
                 to = movement.From;
             }
             image.currentLocation = to;
-            $scope.images[from - 1] = {};
+            resetImageStyles($scope.images);
+            image.style = animationString(to, from, false);
+            var emptyslot = { style: animationString(to, from, true) };
+            $scope.images[from - 1] = emptyslot;
             $scope.images[to - 1] = image;
         }
     }
@@ -129,6 +132,32 @@ app.controller("replayImages", function ($scope, $rootScope) {
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
+function resetImageStyles(images) {
+    for (var i = 0; i < images.length; i++) {
+        images[i].style = "";
+    }
+}
+function animationString(to, from, reverse) {
+    var animation
+    var time = "1s";
+    var style = "ease";
+    var index = 0;
+    if (!reverse) {
+        animation = "Move" + from + "-" + to + " " + time + " " + style;
+        index = 1;
+    }
+    else {
+        animation = "Move" + to + "-" + from + " " + time + " " + style;
+    }
+    var fullAnimation = {
+        'animation': animation,
+        '-webkit-animation': animation,
+        '-moz-animation': animation,
+        'z-index':index
+    }
+    return fullAnimation;
+}
+
 
 //gets the id given in the url in the form "replay.html?levelid=1234" if id is 1234
 function GetURLLevelID() {

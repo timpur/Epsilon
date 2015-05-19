@@ -150,6 +150,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             if (move.end == null) move.end = new Date();
             // move an image one at a time.
             setTimeout(function (move) {
+                resetImageStyles($scope.images);
                 moveImage(move.image, move.to, move.start, move.end);
             }, time, move);
             time += 1000;
@@ -242,13 +243,19 @@ app.controller("NumControler", function ($scope, $rootScope) {
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-
+function resetImageStyles(images) {
+    for (var i = 0; i < images.length; i++) {
+        images[i].style = "";
+    }
+}
 function animationString(to, from, reverse) {
     var animation
     var time = "1s";
     var style = "ease";
+    var index = 0;
     if (!reverse) {
         animation = "Move" + from + "-" + to + " " + time + " " + style;
+        index = 1;
     }
     else {
         animation = "Move" + to + "-" + from + " " + time + " " + style;
@@ -256,7 +263,8 @@ function animationString(to, from, reverse) {
     var fullAnimation = {
         'animation': animation,
         '-webkit-animation': animation,
-        '-moz-animation': animation
+        '-moz-animation': animation,
+        'z-index': index
     }
     return fullAnimation;
 }

@@ -120,13 +120,16 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
                 addMovement(start, end, image.ID, from, to, true);
                 return false;
             }
-            
+
             var newPos = FindImageBasedOffPos(to);
             if (newPos.isImage != true) {
                 // Image can be moved
                 image.currentLocation = to;
-                $scope.images[imagePos - 1] = {};
+                image.style = animationString(to, from, false);
+                var emptyslot = { style: animationString(to, from, true) };
+                $scope.images[imagePos - 1] = emptyslot;
                 $scope.images[to - 1] = image;
+                $scope.$apply();
                 addMovement(start, end, image.ID, from, to, false);
                 return true;
             }
@@ -139,15 +142,21 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
         };
         // this is the main logic
         // loop through the queue
+        var time = 0;
         for (var i = 0 ; i < queue.length; i++) {
             var move = queue[i];
             //
             if (move.start == null) move.start = new Date();
             if (move.end == null) move.end = new Date();
             // move an image one at a time.
-            moveImage(move.image, move.to, move.start, move.end);
+            setTimeout(function (move) {
+                moveImage(move.image, move.to, move.start, move.end);
+            }, time, move);
+            time += 1000;
         }
-        $scope.CheckImageOrder();
+        setTimeout(function () {
+            $scope.CheckImageOrder();
+        }, time);
     }
 
     $scope.CheckImageOrder = function () {
@@ -218,7 +227,9 @@ app.controller("NumControler", function ($scope, $rootScope) {
             $scope.inputs[i].start = null;
             $scope.inputs[i].end = null;
         }
-        Movement(queue);
+        setTimeout(function () {
+            Movement(queue);
+        }, 0);
     }
     $scope.onChange = function (index) {
         if (StartTime == null) StartTime = new Date();
@@ -232,6 +243,23 @@ app.controller("NumControler", function ($scope, $rootScope) {
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 
+function animationString(to, from, reverse) {
+    var animation
+    var time = "1s";
+    var style = "ease";
+    if (!reverse) {
+        animation = "Move" + from + "-" + to + " " + time + " " + style;
+    }
+    else {
+        animation = "Move" + to + "-" + from + " " + time + " " + style;
+    }
+    var fullAnimation = {
+        'animation': animation,
+        '-webkit-animation': animation,
+        '-moz-animation': animation
+    }
+    return fullAnimation;
+}
 
 function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
@@ -304,8 +332,8 @@ function OrderImages(rootScope) {
                 temp = order.pop();
                 order.unshift(temp);
                 break;
-            //default://level 2C reverse order (there is no level 2C for now)
-            //    order.reverse();
+                //default://level 2C reverse order (there is no level 2C for now)
+                //    order.reverse();
         }
     }
     DynamicImageOrder = order;

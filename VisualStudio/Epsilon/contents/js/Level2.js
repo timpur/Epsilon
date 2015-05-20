@@ -125,10 +125,12 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             if (newPos.isImage != true) {
                 // Image can be moved
                 image.currentLocation = to;
+                // Adding Correct animation to display
                 image.style = animationString(to, from, false);
                 var emptyslot = { style: animationString(to, from, true) };
                 $scope.images[imagePos - 1] = emptyslot;
                 $scope.images[to - 1] = image;
+                // Apply Changes 
                 $scope.$apply();
                 addMovement(start, end, image.ID, from, to, false);
                 return true;
@@ -149,6 +151,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             if (move.start == null) move.start = new Date();
             if (move.end == null) move.end = new Date();
             // move an image one at a time.
+            // Set a delay on when a move occures after a certain time(incraments a second everyTime)
             setTimeout(function (move) {
                 resetImageStyles($scope.images);
                 moveImage(move.image, move.to, move.start, move.end);

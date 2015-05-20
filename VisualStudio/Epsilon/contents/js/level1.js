@@ -197,6 +197,7 @@ function gotToNextLevel() {
             window.location = "level1.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
+        sound1.play();
         $("#modalContent").html("You Have finished level 1");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {

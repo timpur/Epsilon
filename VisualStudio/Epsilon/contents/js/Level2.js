@@ -278,6 +278,7 @@ function gotToNextLevel() {
             window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
+        sound1.play();
         $("#modalContent").html("You Have finished level 2");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {

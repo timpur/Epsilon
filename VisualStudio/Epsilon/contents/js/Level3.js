@@ -16,7 +16,7 @@ var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3"
 var app = angular.module('epsilon', ['ngDragDrop']);
 var randomMessages = ["WOW! You are the best player ever", "Keep it up, I'm proud of you", "You deserve a candy, go ask your mum for one", "Determination is the key to success, Good work!", "Keep up the good work", "I’m impressed of your intelligence", "That deserves an ice-cream"];
 var GoClicks = 0;
-var GoClicksLimit = 0;
+var GoClicksLimit = 100;
 
 $(document).ready(function () {
     if (session.Load()) {
@@ -39,7 +39,7 @@ function SetUPSubLevel(Name) {
     SubLevel = session.CreateSubLevel(Name);
     //Displays the Images according to the sub level and the number of inputs
     DisplaySubLevel();
-    SetNumInputs();
+    //SetNumInputs();
 }
 
 function SaveSubLevel(Success) {
@@ -69,10 +69,44 @@ app.run(function ($rootScope) {
 
 app.controller("mainController", function ($scope, $rootScope) {
     SetTitle = function () {
-        $scope.level = "3" + SubLevel.Name.toString().toUpperCase();
+        $scope.level = "3";// + SubLevel.Name.toString().toUpperCase();
         $scope.randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
         $scope.$apply();
     }
+});
+
+app.controller("dropPanelCtrl", function ($scope, $rootScope) {
+    $scope.i = 0;
+    $scope.codelines = [];
+    $scope.onDrop = function (event, data) {
+        var itemDroped = data.draggable[0];
+        var codeline = { id: itemDroped.id, text: itemDroped.textContent };
+        $scope.codelines.push(codeline);
+    };
+});
+
+app.controller("pickPanelCtrl", function ($scope, $rootScope) {
+    $scope.codelines = [
+        { id: "i0", text: "i <- 0" },
+        { id: "i1", text: "i <- 1" },
+        { id: "i3", text: "i <- 3" },
+        { id: "i4", text: "i <- 4" },
+        { id: "m14", text: "move 1 to 4" },
+        { id: "m14", text: "move 1 to 4" },
+        { id: "m14", text: "move 1 to 4" },
+        { id: "m14", text: "move 1 to 4" },
+        { id: "mii-1", text: "move i to i-1" },
+        { id: "mii+1", text: "move i to i+1" },
+        { id: "mi-1i", text: "move i-1 to i" },
+        { id: "mi+1i", text: "move i+1 to i" }
+    ];
+    $scope.onStart = function (event, data) {
+        var itemDrag = data.helper[0];
+        $(itemDrag).css("width", "115");
+    };
+    $scope.onStop = function (event, data) {
+        var itemDrag = data.helper[0];
+    };
 });
 
 app.controller("staticImages", function ($scope, $rootScope) {
@@ -180,7 +214,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
 
 });
 
-app.controller("NumControler", function ($scope, $rootScope) {
+/*app.controller("NumControler", function ($scope, $rootScope) {
     $scope.NumInputs = 0;
     $scope.inputs = [];
     SetNumInputs = function () {
@@ -227,7 +261,7 @@ app.controller("NumControler", function ($scope, $rootScope) {
             if ($scope.inputs[index - 1].end == null) $scope.inputs[index - 1].end = new Date();
         }
     }
-});
+});*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -242,6 +276,7 @@ function gotToNextLevel() {
             window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
+        sound1.play();
         $("#modalContent").html("You Have finished level 3");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
@@ -299,11 +334,11 @@ function OrderImages(rootScope) {
                 temp = order.shift();
                 order.push(temp);
                 break;
-            case "B": //level 3B shift images to the right
-            default: //there is no level 3C so 3B is also the default-one
-                temp = order.pop();
-                order.unshift(temp);
-                break;
+            //case "B": //level 3B shift images to the right
+            //default: //there is no level 3C so 3B is also the default-one
+            //    temp = order.pop();
+            //    order.unshift(temp);
+            //    break;
             //default://level 3C reverse order (there is no level 3C for now)
             //    order.reverse();
         }

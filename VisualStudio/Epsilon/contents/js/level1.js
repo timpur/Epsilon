@@ -192,6 +192,8 @@ function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level1.html?sublevel=" + Sublevels[subLNumber + 1];
@@ -199,9 +201,10 @@ function gotToNextLevel() {
     } else {
         sound1.play();
         $("#modalContent").html("You Have finished level 1");
+        $("#theModal").find("#close").hide();
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
-          window.location = "/results.html";
+          window.location = "/index.html";
         });
     }
 }

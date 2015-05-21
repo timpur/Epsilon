@@ -19,6 +19,7 @@ var GoClicks = 0;
 var GoClicksLimit = 0;
 
 $(document).ready(function () {
+    $("#theModal").modal({backdrop:false,keyboard:false, show:false});
     if (session.Load()) {
         var SubLevelName = GetURLSubLevelData();
         SetUPSubLevel(SubLevelName);
@@ -183,6 +184,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             setTimeout(function () {
                 SaveSubLevel(false)
                 $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
@@ -201,10 +203,10 @@ app.controller("NumControler", function ($scope, $rootScope) {
         var num = 0;
         if (SublevelNum == 0) {
             num = 1;
-            GoClicksLimit = 5;
+            GoClicksLimit = 10;
         }
         else if (SublevelNum == 1) {
-            num = 5;
+            num = 7;
             GoClicksLimit = 1;
         }
         $scope.NumInputs = num;
@@ -276,16 +278,19 @@ function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
         sound1.play();
         $("#modalContent").html("You Have finished level 2");
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").hide();
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "/results.html";
+            window.location = "/index.html";
         });
     }
 }

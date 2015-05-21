@@ -27,7 +27,24 @@ app.controller("mainController", function ($scope, $rootScope) {
         t2 = new Date(t2);
 
         var d = t2.valueOf() - t1.valueOf();
+        d /= 10;
+        d = Math.round(d);
+        d /= 100;
         return d;
+    };
+    $scope.colour = function (subLevel) {
+        switch (subLevel.Name) {
+            case "A":
+                return "success";
+                break;
+            case "B":
+                return "info"
+                break;
+            case "C":
+                return "warning"
+                break;
+        }
+        return "default";
     };
 });
 

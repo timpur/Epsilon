@@ -204,6 +204,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             setTimeout(function () {
                 SaveSubLevel(false)
                 $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
@@ -271,6 +272,8 @@ function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
@@ -278,9 +281,10 @@ function gotToNextLevel() {
     } else {
         sound1.play();
         $("#modalContent").html("You Have finished level 3");
+        $("#theModal").find("#close").hide();
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "/results.html";
+            window.location = "/index.html";
         });
     }
 }

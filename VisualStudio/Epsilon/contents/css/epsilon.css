@@ -7,6 +7,8 @@ body {
     min-height: 100%;
     /*min-width: 100%;*/
     min-width:975px;
+    height:100%;
+    width:100%;
     background-color: rgb(0,153,153);
     /*background-image: url('http://www.funology.com/wp-content/uploads/bgrnd10.png');*/
     background-image: url("/contents/images/background.png");
@@ -76,6 +78,7 @@ div, img {
     background: darkslategray;
     margin-top: 10px;
     margin-bottom: 10px;
+    position:relative;
 }
 
 .ui-draggable.img {
@@ -86,7 +89,7 @@ div, img {
     height: 100%;
     width: 100%;
     background: gray;
-    border: blue solid;
+    border: blue solid;    
 }
 
 img.toyImage {
@@ -141,14 +144,16 @@ img.toyImage {
 
 #circle {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    font-size: 15px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
     background: black;
     color: white;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    left:-5px;
+    top:-5px;
 }
 
 .move1-2 {

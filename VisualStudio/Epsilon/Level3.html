@@ -36,7 +36,7 @@
                 <div class="modal-footer">
                     <a class="btn btn-success" href="index.html">Go To Menu</a>
                     <a class="btn btn-success" onclick="location.reload()">Retry</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                         <div id="{{codeline.id}}" class="codeline bg-danger text-center" ng-model="codeline"><b>{{codeline.text}}</b></div>
                     </div>
                 </div>
-                <div class="btn btn-success btn-block btn-lg level3gobutton">Go</div>
+                <div class="btn btn-success btn-block btn-lg level3gobutton" ng-click="go()">Go</div>
             </div>
             <div class="col-xs-9">
                 <div id="staticImages" ng-controller="staticImages">
@@ -66,7 +66,7 @@
                 <div id="moveImages" ng-controller="moveImages">
                     <div class="row">
                         <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
-                        <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}">
+                        <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}" ng-style="image.style">
                             <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
                             <div class="imageHolder">
                                 <div id="circle" class="text-center">{{$index + 1}}</div>

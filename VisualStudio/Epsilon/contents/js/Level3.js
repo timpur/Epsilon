@@ -77,28 +77,88 @@ app.controller("mainController", function ($scope, $rootScope) {
 
 app.controller("dropPanelCtrl", function ($scope, $rootScope) {
     $scope.i = 0;
+    $scope.pi = $scope.i;
     $scope.codelines = [];
+    $scope.moveQueue = [];
+    $scope.timeLast = null;
     $scope.onDrop = function (event, data) {
+        if ($scope.timeLast == null) $scope.timeLast = new Date();
         var itemDroped = data.draggable[0];
         var codeline = { id: itemDroped.id, text: itemDroped.textContent };
         $scope.codelines.push(codeline);
+        var move = DecodeCommand(codeline, $scope);
+        if (move != null) {
+            var start = $scope.timeLast;
+            var end = new Date();
+            move.start = start;
+            move.end = end;
+            $scope.moveQueue.push(move);
+            $scope.timeLast = end;
+        } else {
+            if ($scope.timeLast == null) $scope.timeLast = new Date();
+        }
     };
+    $scope.go = function () {
+        setTimeout(function () {
+            Movement($scope.moveQueue);
+        }, 0);
+    }
 });
+
+function DecodeCommand(cmd, scope) {
+    var cmd = cmd.id;
+    cmd = cmd.split('~');
+    var staticMove = {};
+    if (cmd[0] == "m") {
+        var num1 = -1;
+        var num2 = -1;
+        if (cmd[1].contains("i")) {
+            num1 = convertItoNum(cmd[1], scope.i);
+        }
+        else {
+            num1 = Number(cmd[1]);
+        }
+        if (cmd[2].contains("i")) {
+            num2 = convertItoNum(cmd[2], scope.i);
+        }
+        else {
+            num2 = Number(cmd[2]);
+        }
+        staticMove.image = num1;
+        staticMove.to = num2;
+    } else if (cmd[0] == "i") {
+        scope.pi = scope.i;
+        scope.i = Number(cmd[1]);
+        return null;
+    }
+    return staticMove;
+}
+function convertItoNum(Icmd, Ival) {
+    if (Icmd == "i") {
+        return Ival;
+    } else if (Icmd == "i-1") {
+        return Ival - 1;
+
+    } else if (Icmd == "i+1") {
+        return Ival + 1;
+    }
+    return -1;
+}
 
 app.controller("pickPanelCtrl", function ($scope, $rootScope) {
     $scope.codelines = [
-        { id: "i0", text: "i <- 0" },
-        { id: "i1", text: "i <- 1" },
-        { id: "i3", text: "i <- 3" },
-        { id: "i4", text: "i <- 4" },
-        { id: "m14", text: "move 1 to 4" },
-        { id: "m14", text: "move 1 to 4" },
-        { id: "m14", text: "move 1 to 4" },
-        { id: "m14", text: "move 1 to 4" },
-        { id: "mii-1", text: "move i to i-1" },
-        { id: "mii+1", text: "move i to i+1" },
-        { id: "mi-1i", text: "move i-1 to i" },
-        { id: "mi+1i", text: "move i+1 to i" }
+        { id: "i~0", text: "i <- 0" },
+        { id: "i~1", text: "i <- 1" },
+        { id: "i~3", text: "i <- 3" },
+        { id: "i~4", text: "i <- 4" },
+        { id: "m~1~4", text: "move 1 to 4" },
+        { id: "m~2~4", text: "move 2 to 4" },
+        { id: "m~3~4", text: "move 3 to 4" },
+        { id: "m~4~1", text: "move 4 to 1" },
+        { id: "m~i~i-1", text: "move i to i-1" },
+        { id: "m~i~i+1", text: "move i to i+1" },
+        { id: "m~i-1~i", text: "move i-1 to i" },
+        { id: "m~i+1~i", text: "move i+1 to i" }
     ];
     $scope.onStart = function (event, data) {
         var itemDrag = data.helper[0];
@@ -159,8 +219,13 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             if (newPos.isImage != true) {
                 // Image can be moved
                 image.currentLocation = to;
-                $scope.images[imagePos - 1] = {};
+                // Adding Correct animation to display
+                image.style = animationString(to, from, false);
+                var emptyslot = { style: animationString(to, from, true) };
+                $scope.images[imagePos - 1] = emptyslot;
                 $scope.images[to - 1] = image;
+                // Apply Changes 
+                $scope.$apply();
                 addMovement(start, end, image.ID, from, to, false);
                 return true;
             }
@@ -173,15 +238,23 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
         };
         // this is the main logic
         // loop through the queue
+        var time = 0;
         for (var i = 0 ; i < queue.length; i++) {
             var move = queue[i];
             //
             if (move.start == null) move.start = new Date();
             if (move.end == null) move.end = new Date();
             // move an image one at a time.
-            moveImage(move.image, move.to, move.start, move.end);
+            // Set a delay on when a move occures after a certain time(incraments a second everyTime)
+            setTimeout(function (move) {
+                resetImageStyles($scope.images);
+                moveImage(move.image, move.to, move.start, move.end);
+            }, time, move);
+            time += 1000;
         }
-        $scope.CheckImageOrder();
+        setTimeout(function () {
+            $scope.CheckImageOrder();
+        }, time);
     }
 
     $scope.CheckImageOrder = function () {
@@ -204,6 +277,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             setTimeout(function () {
                 SaveSubLevel(false)
                 $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
@@ -265,12 +339,38 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-
+function resetImageStyles(images) {
+    for (var i = 0; i < images.length; i++) {
+        images[i].style = "";
+    }
+}
+function animationString(to, from, reverse) {
+    var animation
+    var time = "1s";
+    var style = "ease";
+    var index = 0;
+    if (!reverse) {
+        animation = "Move" + from + "-" + to + " " + time + " " + style;
+        index = 1;
+    }
+    else {
+        animation = "Move" + to + "-" + from + " " + time + " " + style;
+    }
+    var fullAnimation = {
+        'animation': animation,
+        '-webkit-animation': animation,
+        '-moz-animation': animation,
+        'z-index': index
+    }
+    return fullAnimation;
+}
 
 function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
@@ -278,9 +378,10 @@ function gotToNextLevel() {
     } else {
         sound1.play();
         $("#modalContent").html("You Have finished level 3");
+        $("#theModal").find("#close").hide();
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "/results.html";
+            window.location = "/index.html";
         });
     }
 }
@@ -406,3 +507,5 @@ Array.prototype.isEqualTo = function (arrayB) {
 Array.prototype.clone = function () {
     return this.slice(0);
 };
+
+String.prototype.contains = function(it) { return this.indexOf(it) != -1; };

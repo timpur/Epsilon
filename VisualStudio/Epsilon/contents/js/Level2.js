@@ -19,6 +19,7 @@ var GoClicks = 0;
 var GoClicksLimit = 0;
 
 $(document).ready(function () {
+    $("#theModal").modal({backdrop:false,keyboard:false, show:false});
     if (session.Load()) {
         var SubLevelName = GetURLSubLevelData();
         SetUPSubLevel(SubLevelName);
@@ -125,10 +126,12 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             if (newPos.isImage != true) {
                 // Image can be moved
                 image.currentLocation = to;
+                // Adding Correct animation to display
                 image.style = animationString(to, from, false);
                 var emptyslot = { style: animationString(to, from, true) };
                 $scope.images[imagePos - 1] = emptyslot;
                 $scope.images[to - 1] = image;
+                // Apply Changes 
                 $scope.$apply();
                 addMovement(start, end, image.ID, from, to, false);
                 return true;
@@ -149,6 +152,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             if (move.start == null) move.start = new Date();
             if (move.end == null) move.end = new Date();
             // move an image one at a time.
+            // Set a delay on when a move occures after a certain time(incraments a second everyTime)
             setTimeout(function (move) {
                 resetImageStyles($scope.images);
                 moveImage(move.image, move.to, move.start, move.end);
@@ -180,6 +184,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             setTimeout(function () {
                 SaveSubLevel(false)
                 $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
@@ -198,10 +203,10 @@ app.controller("NumControler", function ($scope, $rootScope) {
         var num = 0;
         if (SublevelNum == 0) {
             num = 1;
-            GoClicksLimit = 5;
+            GoClicksLimit = 10;
         }
         else if (SublevelNum == 1) {
-            num = 5;
+            num = 7;
             GoClicksLimit = 1;
         }
         $scope.NumInputs = num;
@@ -273,16 +278,19 @@ function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
         sound1.play();
         $("#modalContent").html("You Have finished level 2");
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").hide();
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "/results.html";
+            window.location = "/index.html";
         });
     }
 }

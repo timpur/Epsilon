@@ -19,6 +19,7 @@ var GoClicks = 0;
 var GoClicksLimit = 0;
 
 $(document).ready(function () {
+    $("#theModal").modal({backdrop:false,keyboard:false, show:false});
     if (session.Load()) {
         var SubLevelName = GetURLSubLevelData();
         SetUPSubLevel(SubLevelName);
@@ -120,13 +121,18 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
                 addMovement(start, end, image.ID, from, to, true);
                 return false;
             }
-            
+
             var newPos = FindImageBasedOffPos(to);
             if (newPos.isImage != true) {
                 // Image can be moved
                 image.currentLocation = to;
-                $scope.images[imagePos - 1] = {};
+                // Adding Correct animation to display
+                image.style = animationString(to, from, false);
+                var emptyslot = { style: animationString(to, from, true) };
+                $scope.images[imagePos - 1] = emptyslot;
                 $scope.images[to - 1] = image;
+                // Apply Changes 
+                $scope.$apply();
                 addMovement(start, end, image.ID, from, to, false);
                 return true;
             }
@@ -139,15 +145,23 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
         };
         // this is the main logic
         // loop through the queue
+        var time = 0;
         for (var i = 0 ; i < queue.length; i++) {
             var move = queue[i];
             //
             if (move.start == null) move.start = new Date();
             if (move.end == null) move.end = new Date();
             // move an image one at a time.
-            moveImage(move.image, move.to, move.start, move.end);
+            // Set a delay on when a move occures after a certain time(incraments a second everyTime)
+            setTimeout(function (move) {
+                resetImageStyles($scope.images);
+                moveImage(move.image, move.to, move.start, move.end);
+            }, time, move);
+            time += 1000;
         }
-        $scope.CheckImageOrder();
+        setTimeout(function () {
+            $scope.CheckImageOrder();
+        }, time);
     }
 
     $scope.CheckImageOrder = function () {
@@ -170,6 +184,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             setTimeout(function () {
                 SaveSubLevel(false)
                 $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
@@ -188,10 +203,10 @@ app.controller("NumControler", function ($scope, $rootScope) {
         var num = 0;
         if (SublevelNum == 0) {
             num = 1;
-            GoClicksLimit = 5;
+            GoClicksLimit = 10;
         }
         else if (SublevelNum == 1) {
-            num = 5;
+            num = 7;
             GoClicksLimit = 1;
         }
         $scope.NumInputs = num;
@@ -218,7 +233,9 @@ app.controller("NumControler", function ($scope, $rootScope) {
             $scope.inputs[i].start = null;
             $scope.inputs[i].end = null;
         }
-        Movement(queue);
+        setTimeout(function () {
+            Movement(queue);
+        }, 0);
     }
     $scope.onChange = function (index) {
         if (StartTime == null) StartTime = new Date();
@@ -231,21 +248,49 @@ app.controller("NumControler", function ($scope, $rootScope) {
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-
+function resetImageStyles(images) {
+    for (var i = 0; i < images.length; i++) {
+        images[i].style = "";
+    }
+}
+function animationString(to, from, reverse) {
+    var animation
+    var time = "1s";
+    var style = "ease";
+    var index = 0;
+    if (!reverse) {
+        animation = "Move" + from + "-" + to + " " + time + " " + style;
+        index = 1;
+    }
+    else {
+        animation = "Move" + to + "-" + from + " " + time + " " + style;
+    }
+    var fullAnimation = {
+        'animation': animation,
+        '-webkit-animation': animation,
+        '-moz-animation': animation,
+        'z-index': index
+    }
+    return fullAnimation;
+}
 
 function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
+        sound1.play();
         $("#modalContent").html("You Have finished level 2");
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").hide();
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "/results.html";
+            window.location = "/index.html";
         });
     }
 }
@@ -304,8 +349,8 @@ function OrderImages(rootScope) {
                 temp = order.pop();
                 order.unshift(temp);
                 break;
-            //default://level 2C reverse order (there is no level 2C for now)
-            //    order.reverse();
+                //default://level 2C reverse order (there is no level 2C for now)
+                //    order.reverse();
         }
     }
     DynamicImageOrder = order;

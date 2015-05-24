@@ -72,7 +72,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="collapseThree" class="panel-collapse collapse in">
+                    <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
                             successful: {{movement.Failed? "No":"Yes"}}<br />
                             Time taken: {{TimeDiff(movement.StartTime,movement.EndTime)}}
@@ -110,7 +110,7 @@
             <div id="replayImages" ng-controller="replayImages">
                 <div class="row">
                     <!-- this is a repated element for each image in images. Note "image" is now an object.  -->
-                    <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}" ng-style="image.style">
+                    <div class="col-xs-4" ng-repeat="image in images" ng-class="{'col-xs-offset-4':$last}">
                         <!-- this is an element that is dropable. it is disabled if there is an image in it by default start up-->
                         <div id="holderid{{$index}}" class="imageHolder">
                             <div id="circle" class="text-center">{{$index + 1}}</div>

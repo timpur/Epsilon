@@ -11,8 +11,10 @@
 
     <script src="contents/js/jquery-2.1.3.min.js"></script>
     <script src="contents/js/jquery-ui.min.js"></script>
+    <script src="contents/js/jquery.ui.touch-punch.min.js"></script>
     <script src="contents/js/bootstrap.min.js"></script>
     <script src="contents/js/angular.min.js"></script>
+    <script src="contents/js/angular-dragdrop.min.js"></script>
     <script src="contents/js/epsilon.js"></script>
     <script src="contents/js/results.js"></script>
 </head>
@@ -27,7 +29,7 @@
         </div>
         <a href="index.html" class="btn btn-primary">Go to Menu</a>
         <p><br /></p>
-        <div class="panel panel-success">
+        <div class="panel panel-danger">
             <div class="panel-heading">Session:</div>
             <div class="panel-body">
                 <ul>
@@ -40,18 +42,19 @@
             </div>
         </div>
         <div ng-repeat="level in session.Levels">
-            <div class="panel panel-success">
+            <div class="panel panel-primary">
                 <div class="panel-heading">{{level.Name}}</div>
                 <div class="panel-body">
-                    <div ng-repeat="sublevel in level.SubLevels">
-                        <div class="panel panel-success">
+                    <div ng-repeat="sublevel in level.SubLevels | orderBy: ['Name','StartTime']">
+                        <div class="panel panel-{{colour(sublevel)}}">
                             <div class="panel-heading">Sublevel {{sublevel.Name}}</div>
                             <div class="panel-body">
                                 <ul>
-                                    <li>Start Time: {{sublevel.StartTime | date:'h:mm:ss a'}}</li>
-                                    <li>End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}</li>
+                                    <li>Start Time: {{sublevel.StartTime | date:'h:mm a'}}</li>
+                                    <li>End Time: {{sublevel.EndTime | date:'h:mm a'}}</li>
                                     <li>Success: <span ng-if="sublevel.Success">Yes</span> <span ng-if="!sublevel.Success">No</span></li>
                                 </ul>
+                                <a href="replay.html?levelid={{sublevel.ID}}" class="btn btn-primary">Replay</a>
                                 <h3><small>Movements:</small></h3>
                                 <table class="table table-bordered table-hover">
                                     <thead>
@@ -72,10 +75,10 @@
                                             <td>{{movement.ImageID}}</td>
                                             <td>{{movement.From}}</td>
                                             <td>{{movement.Too}}</td>
-                                            <td>{{movement.Failed? "Success":"Fail"}}</td>
+                                            <td>{{movement.Failed? "Fail":"Success"}}</td>
                                             <td>{{movement.StartTime | date:'h:mm:ss:sss a'}}</td>
                                             <td>{{movement.EndTime | date:'h:mm:ss:sss a'}}</td>
-                                            <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds</td>
+                                            <td>{{TimeDiff(movement.StartTime,movement.EndTime)}} Seconds</td>
                                         </tr>
                                     </tbody>
                                 </table>

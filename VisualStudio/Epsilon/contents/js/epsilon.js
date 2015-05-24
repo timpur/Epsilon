@@ -97,6 +97,7 @@ function Session() {
             var Level = this.Session.Levels[i];
             if (Level.ID == LevelID) {
                 Level.SubLevels.push(SubLevel);
+                SubLevel.ID = LevelID * 10 + Level.SubLevels.length;
                 return true;
             }
         }
@@ -104,6 +105,7 @@ function Session() {
     };
     this.CreateSubLevel = function (Name) {
         var SubLevel = {};
+        SubLevel.ImageIds = {}; //saves the order of the static images, and interactive images
         SubLevel.Name = Name;
         SubLevel.StartTime = new Date();
         SubLevel.EndTime = null;
@@ -111,10 +113,33 @@ function Session() {
         SubLevel.Movements = [];
         return SubLevel;
     };
-    this.SetSubLevelDetails = function (SubLevel, StartTime, EndTime, Success) {
+    this.SetSubLevelDetails = function (SubLevel, StartTime, EndTime, Success, imageIds) {
         SubLevel.StartTime = StartTime;
         SubLevel.EndTime = EndTime;
         SubLevel.Success = Success;
+        SubLevel.ImageIds = imageIds;
+    };
+    this.getSubLevel = function (sublevelid) {
+        for (var i = 0; i < this.Session.Levels.length; i++) {
+            var Level = this.Session.Levels[i];
+            for (var j = 0; j < Level.SubLevels.length; j++) {
+                if (Level.SubLevels[j].ID == sublevelid) {
+                    return Level.SubLevels[j];
+                }
+            }
+        }
+        return null;
+    };
+    this.getSubLevelName = function (sublevelid) {
+        for (var i = 0; i < this.Session.Levels.length; i++) {
+            var Level = this.Session.Levels[i];
+            for (var j = 0; j < Level.SubLevels.length; j++) {
+                if (Level.SubLevels[j].ID == sublevelid) {
+                    return Level.Name + Level.SubLevels[j].Name;
+                }
+            }
+        }
+        return null;
     };
     this.AddMovement = function (SubLevel , Movement) {
         SubLevel.Movements.push(Movement);

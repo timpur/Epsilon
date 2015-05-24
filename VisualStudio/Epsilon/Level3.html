@@ -16,7 +16,7 @@
     <script src="contents/js/angular.min.js"></script>
     <script src="contents/js/angular-dragdrop.min.js"></script>
     <script src="contents/js/epsilon.js"></script>
-    <script src="contents/js/Level2.js"></script>
+    <script src="contents/js/Level3.js"></script>
 </head>
 <body ng-app="epsilon" ng-controller="mainController">
     <div id="NavScreen">
@@ -36,38 +36,23 @@
                 <div class="modal-footer">
                     <a class="btn btn-success" href="index.html">Go To Menu</a>
                     <a class="btn btn-success" onclick="location.reload()">Retry</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
     <div id="titleDiv">Level {{level}}</div>
-    <div class="col-xs-3">
-        <div id="NumControler" ng-controller="NumControler">
-            <form>
-                <div id="inputs" ng-repeat="input in inputs">
-                    <h4>Movement {{$index + 1}}</h4>
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label for="select" class="col-sm-6 control-label">Move Image: </label>
-                            <div class="col-sm-6">
-                                <input type="number" class="form-control input-sm" id="select" placeholder="Image Number" ng-model="input.select" ng-change="onChange($index)">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="to" class="col-sm-6 control-label">To Location: </label>
-                            <div class="col-sm-6">
-                                <input type="number" class="form-control input-sm" id="to" placeholder="Location Number" ng-model="input.to" ng-change="onChange($index)">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-success btn-lg btn-block" ng-click="Go()">Go</button>
-            </form>
-        </div>
-    </div>
     <div id="content" class="container">
         <div class="row">
+            <div class="col-xs-3 dropcontainer" ng-controller="dropPanelCtrl">
+                <div class="text-center droppanel" data-drop="true" jqyoui-droppable="{onDrop:'onDrop'}">
+                    <div><h3><code>i = {{i}}</code></h3></div>
+                    <div ng-repeat="codeline in codelines">
+                        <div id="{{codeline.id}}" class="codeline bg-danger text-center" ng-model="codeline"><b>{{codeline.text}}</b></div>
+                    </div>
+                </div>
+                <div class="btn btn-success btn-block btn-lg level3gobutton">Go</div>
+            </div>
             <div class="col-xs-9">
                 <div id="staticImages" ng-controller="staticImages">
                     <div class="row">
@@ -91,6 +76,14 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3"></div>
+            <div class="col-xs-9 pickpanel">
+                <div ng-controller="pickPanelCtrl">
+                    <div class="col-sm-2" ng-repeat="codeline in codelines">
+                        <div id="{{codeline.id}}" class="codeline bg-danger text-center movable" data-drag="true" jqyoui-draggable="{onStart:'onStart',onStop:'onStop'}" data-jqyoui-options="{ revert: 'invalid', containment:'body', helper: 'clone'}" ng-model="codeline"><b>{{codeline.text}}</b></div>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ var SubLevel = null;
 var StartTime = null;
 var EndTime = null;
 var ImageOrder;
+var DynamicImageOrder = [];
 var Sublevels = ["A", "B", "C"]; //sublevels for level 1 (3 sublevels)
 var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3");
 var app = angular.module('epsilon', ['ngDragDrop']);
@@ -41,7 +42,8 @@ function SetUPSubLevel(Name) {
 function SaveSubLevel(Success) {
     // Add SubLevel with all movemments to Session
     EndTime = new Date() // set the end time of level now;
-    session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success);
+    var imageIds = { "static": ImageOrder, "dynamic": DynamicImageOrder };
+    session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success, imageIds);
     session.AddSubLevel(SubLevel, 1);
     session.Save();   
 }
@@ -96,6 +98,7 @@ app.controller("dragableImages", function ($scope, $rootScope, $filter) {
         $scope.images = OrderDraggableImages($rootScope);
         // push another object that is empty for the blank space
         $scope.images.push({});
+
     }
     $scope.OrderImages();
     // On drop event.
@@ -189,15 +192,19 @@ function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level1.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
+        sound1.play();
         $("#modalContent").html("You Have finished level 1");
+        $("#theModal").find("#close").hide();
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
-          window.location = "/results.html";
+          window.location = "/index.html";
         });
     }
 }
@@ -260,6 +267,7 @@ function OrderDraggableImages(rootScope) {
                 order.reverse();
         }
     }
+    DynamicImageOrder = order;
     //create array of images on the specified order
     var images = [];
     for (var i = 0; i < 3; i++) {

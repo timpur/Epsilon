@@ -9,7 +9,8 @@
 var SubLevel = null;
 var StartTime = null;
 var EndTime = null;
-var ImageOrder;
+var ImageOrder = [];
+var DynamicImageOrder = [];
 var Sublevels = ["A", "B"]; //sublevels for level 2 (2 sublevels)
 var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3");
 var app = angular.module('epsilon', ['ngDragDrop']);
@@ -18,6 +19,7 @@ var GoClicks = 0;
 var GoClicksLimit = 0;
 
 $(document).ready(function () {
+    $("#theModal").modal({backdrop:false,keyboard:false, show:false});
     if (session.Load()) {
         var SubLevelName = GetURLSubLevelData();
         SetUPSubLevel(SubLevelName);
@@ -36,6 +38,7 @@ function GetURLSubLevelData() {
 function SetUPSubLevel(Name) {
     Name = String(Name).toUpperCase();
     SubLevel = session.CreateSubLevel(Name);
+    //Displays the Images according to the sub level and the number of inputs
     DisplaySubLevel();
     SetNumInputs();
 }
@@ -43,7 +46,8 @@ function SetUPSubLevel(Name) {
 function SaveSubLevel(Success) {
     // Add SubLevel with all movemments to Session
     EndTime = new Date() // set the end time of level now;
-    session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success);
+    var imageIds = { "static": ImageOrder, "dynamic": DynamicImageOrder };
+    session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success, imageIds);
     session.AddSubLevel(SubLevel, 2);
     session.Save();
 }
@@ -84,6 +88,7 @@ app.controller("staticImages", function ($scope, $rootScope) {
     }
     $scope.upDateImageOrder();
 });
+
 app.controller("moveImages", function ($scope, $rootScope, $filter) {
     DisplaySubLevel = function () {
         $scope.OrderImages();
@@ -96,12 +101,14 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
         $scope.images.push({});
     }
     $scope.OrderImages();
-
+    // function that takes a queue of movements to preform
     Movement = function (queue) {
         var FindImageBasedOffPos = function (pos) {
             return $scope.images[pos - 1];
         };
         var moveImage = function (imagePos, to, start, end) {
+            //Check if valid move and record the outcome.
+
             if (imagePos < 1 || imagePos > $scope.images.length) {
                 addMovement(start, end, -1, imagePos, to, true);
                 return false;
@@ -117,9 +124,15 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
 
             var newPos = FindImageBasedOffPos(to);
             if (newPos.isImage != true) {
+                // Image can be moved
                 image.currentLocation = to;
-                $scope.images[imagePos - 1] = {};
+                // Adding Correct animation to display
+                image.style = animationString(to, from, false);
+                var emptyslot = { style: animationString(to, from, true) };
+                $scope.images[imagePos - 1] = emptyslot;
                 $scope.images[to - 1] = image;
+                // Apply Changes 
+                $scope.$apply();
                 addMovement(start, end, image.ID, from, to, false);
                 return true;
             }
@@ -130,13 +143,25 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
 
 
         };
+        // this is the main logic
+        // loop through the queue
+        var time = 0;
         for (var i = 0 ; i < queue.length; i++) {
             var move = queue[i];
+            //
             if (move.start == null) move.start = new Date();
             if (move.end == null) move.end = new Date();
-            moveImage(move.image, move.to, move.start, move.end);
+            // move an image one at a time.
+            // Set a delay on when a move occures after a certain time(incraments a second everyTime)
+            setTimeout(function (move) {
+                resetImageStyles($scope.images);
+                moveImage(move.image, move.to, move.start, move.end);
+            }, time, move);
+            time += 1000;
         }
-        $scope.CheckImageOrder();
+        setTimeout(function () {
+            $scope.CheckImageOrder();
+        }, time);
     }
 
     $scope.CheckImageOrder = function () {
@@ -153,11 +178,13 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             // Success
             SaveSubLevel(true);
             gotToNextLevel();
-        } else if (GoClicks >= GoClicksLimit) {
-            // option to restart level ?
+        }
+        else if (GoClicks >= GoClicksLimit) {
+            // option to restart level if reached max numbers of tries
             setTimeout(function () {
                 SaveSubLevel(false)
                 $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
@@ -167,6 +194,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
     }
 
 });
+
 app.controller("NumControler", function ($scope, $rootScope) {
     $scope.NumInputs = 0;
     $scope.inputs = [];
@@ -175,10 +203,10 @@ app.controller("NumControler", function ($scope, $rootScope) {
         var num = 0;
         if (SublevelNum == 0) {
             num = 1;
-            GoClicksLimit = 5;
+            GoClicksLimit = 10;
         }
         else if (SublevelNum == 1) {
-            num = 5;
+            num = 7;
             GoClicksLimit = 1;
         }
         $scope.NumInputs = num;
@@ -205,7 +233,9 @@ app.controller("NumControler", function ($scope, $rootScope) {
             $scope.inputs[i].start = null;
             $scope.inputs[i].end = null;
         }
-        Movement(queue);
+        setTimeout(function () {
+            Movement(queue);
+        }, 0);
     }
     $scope.onChange = function (index) {
         if (StartTime == null) StartTime = new Date();
@@ -218,21 +248,49 @@ app.controller("NumControler", function ($scope, $rootScope) {
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
-
+function resetImageStyles(images) {
+    for (var i = 0; i < images.length; i++) {
+        images[i].style = "";
+    }
+}
+function animationString(to, from, reverse) {
+    var animation
+    var time = "1s";
+    var style = "ease";
+    var index = 0;
+    if (!reverse) {
+        animation = "Move" + from + "-" + to + " " + time + " " + style;
+        index = 1;
+    }
+    else {
+        animation = "Move" + to + "-" + from + " " + time + " " + style;
+    }
+    var fullAnimation = {
+        'animation': animation,
+        '-webkit-animation': animation,
+        '-moz-animation': animation,
+        'z-index': index
+    }
+    return fullAnimation;
+}
 
 function gotToNextLevel() {
     var subLNumber = getSublevelNumber();
     if (subLNumber < Sublevels.length - 1) {
         sound1.play();
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").show();
+        $("#theModal").find("#close").text("Next Level");
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
+        sound1.play();
         $("#modalContent").html("You Have finished level 2");
-        $("#theModal").modal('show');
+        $("#theModal").find("#close").hide();
+        $("#theModal").modal('show');        
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "/results.html";
+            window.location = "/index.html";
         });
     }
 }
@@ -295,6 +353,7 @@ function OrderImages(rootScope) {
                 //    order.reverse();
         }
     }
+    DynamicImageOrder = order;
     //create array of images on the specified order
     var images = [];
     for (var i = 0; i < 3; i++) {

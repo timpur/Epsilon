@@ -18,9 +18,9 @@
     <script src="contents/js/epsilon.js"></script>
 
     <script>
-    $(document).ready(function () {
-        $('#exportJSON').html(session.Export());
-    });
+        $(document).ready(function () {
+            $('#exportJSON').html(session.Export());
+        });
 
     </script>
 </head>
@@ -43,7 +43,7 @@
         <h2>JSON Data to be loaded into session</h2>
         <p>
             <textarea cols="160" rows="10" id="importJSON"></textarea>
-            <a href="#" onclick="session.Import($('#importJSON').val()); $('#importJSON').val('')" class="btn btn-primary">Import Data</a>
+            <a href="#" onclick="if(session.Import($('#importJSON').val())) window.location = '/results.html'; $('#importJSON').val('')" class="btn btn-primary">Import Data</a>
         </p>
 
     </div>

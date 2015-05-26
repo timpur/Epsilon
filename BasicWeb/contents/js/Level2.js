@@ -19,7 +19,7 @@ var GoClicks = 0;
 var GoClicksLimit = 0;
 
 $(document).ready(function () {
-    $("#theModal").modal({backdrop:false,keyboard:false, show:false});
+    $("#theModal").modal({ backdrop: false, keyboard: false, show: false });
     if (session.Load()) {
         var SubLevelName = GetURLSubLevelData();
         SetUPSubLevel(SubLevelName);
@@ -223,8 +223,8 @@ app.controller("NumControler", function ($scope, $rootScope) {
         for (var i = 0; i < $scope.inputs.length; i++) {
             if ($scope.inputs[i].select != null || $scope.inputs[i].to != null)
                 queue.push({
-                    image: $scope.inputs[i].select,
-                    to: $scope.inputs[i].to,
+                    image: isNaN($scope.inputs[i].select) ? -1 : $scope.inputs[i].select,
+                    to: isNaN($scope.inputs[i].to) ? -1 : $scope.inputs[i].to,
                     start: $scope.inputs[i].start,
                     end: $scope.inputs[i].end
                 });
@@ -280,7 +280,7 @@ function gotToNextLevel() {
         sound1.play();
         $("#theModal").find("#close").show();
         $("#theModal").find("#close").text("Next Level");
-        $("#theModal").modal('show');        
+        $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
         });
@@ -288,7 +288,7 @@ function gotToNextLevel() {
         sound1.play();
         $("#modalContent").html("You Have finished level 2");
         $("#theModal").find("#close").hide();
-        $("#theModal").modal('show');        
+        $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
             window.location = "/index.html";
         });

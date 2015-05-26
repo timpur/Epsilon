@@ -69,7 +69,7 @@
         $scope.ChildAge = null;
         $scope.SupervisorID = null;
         $scope.Start = function () {
-            var go = confirm("Are You Sure You Want To Start a New Session?");
+            var go = confirm("Are You Sure You Want To Start a New Session?\nThis Will Remove All Previous Session Data.");
             if (go) {
                 var ChildID = $scope.ChildID;
                 var ChildAge = $scope.ChildAge;

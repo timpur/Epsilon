@@ -81,9 +81,7 @@
     <Content Include="contents\images\image1.jpg" />
     <Content Include="contents\images\image2.jpg" />
     <Content Include="contents\images\image3.jpg" />
-    <Content Include="contents\images\image4.jpg" />
-    <Content Include="contents\images\image5.jpg" />
-    <Content Include="contents\images\image6.jpg" />
+    <Content Include="contents\images\Success_Sound.mp3" />
     <Content Include="contents\js\angular-dragdrop.min.js" />
     <Content Include="contents\js\angular.min.js" />
     <Content Include="contents\js\bootstrap.min.js" />

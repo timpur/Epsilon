@@ -12,7 +12,7 @@ var EndTime = null;
 var ImageOrder = [];
 var DynamicImageOrder = [];
 var Sublevels = ["A", "B"]; //sublevels for level 2 (2 sublevels)
-var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3");
+var sound1 = new Audio("contents/images/Success_Sound.mp3");
 var app = angular.module('epsilon', ['ngDragDrop']);
 var randomMessages = ["WOW! You are the best player ever", "Keep it up, I'm proud of you", "You deserve a candy, go ask your mum for one", "Determination is the key to success, Good work!", "Keep up the good work", "I’m impressed of your intelligence", "That deserves an ice-cream"];
 var GoClicks = 0;
@@ -61,9 +61,9 @@ app.run(function ($rootScope) {
 
     // This is where image locations and id are located and will be coppeid for use in controllers 
     $rootScope.rootImages = [
-        { ID: 1, name: "", src: "contents/images/image4.jpg" },
-        { ID: 2, name: "", src: "contents/images/image5.jpg" },
-        { ID: 3, name: "", src: "contents/images/image6.jpg" }
+        { ID: 1, name: "", src: "contents/images/image1.jpg" },
+        { ID: 2, name: "", src: "contents/images/image2.jpg" },
+        { ID: 3, name: "", src: "contents/images/image3.jpg" }
     ];
 
 });

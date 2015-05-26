@@ -13,7 +13,6 @@ body {
     /*background-image: url('http://www.funology.com/wp-content/uploads/bgrnd10.png');*/
     background-image: url("../images/background.png");
     background-size: 100%;
-    position: absolute;
 }
 
     body.databody {

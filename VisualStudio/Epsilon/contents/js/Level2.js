@@ -183,13 +183,13 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             // option to restart level if reached max numbers of tries
             setTimeout(function () {
                 SaveSubLevel(false)
-                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
+                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/><br/> You can Retry.");
                 $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
                 });
-            }, 1000);
+            }, 0);
         }
     }
 

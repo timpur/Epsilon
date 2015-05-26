@@ -5,7 +5,7 @@ var session = new Session();
 function Session() {
     this.Session = null;
     this.StroageName = "Session";
-    this.SessionExists = function(){
+    this.SessionExists = function () {
 
         if (db.getItem(this.StroageName) == null || db.getItem(this.StroageName) == undefined) {
             return false;
@@ -29,16 +29,30 @@ function Session() {
         }
         catch (e) {
             return false;
-        };        
+        };
     };
-    this.Export = function () {
-
+    this.Export = function (strFormat) {
+        if (this.SessionExists()) {
+            var ob = db.getItem(this.StroageName);
+            ob = JSON.parse(ob);
+            return JSON.stringify(ob);
+        }
+        return false;
+    };
+    this.Import = function (strData) {
+        if (strData) {
+            db.setItem(this.StroageName, strData);
+            alert('Import Complete!');
+            return true;
+        };
+        alert('Invalid Import!');
+        return false;
     };
     this.EndSession = function () {
 
     };
     this.ClearSession = function () {
-        try{
+        try {
             this.Session = null;
             db.removeItem(this.StroageName);
             return true;
@@ -141,10 +155,10 @@ function Session() {
         }
         return null;
     };
-    this.AddMovement = function (SubLevel , Movement) {
+    this.AddMovement = function (SubLevel, Movement) {
         SubLevel.Movements.push(Movement);
     };
-    this.CreateMovement = function (StartTime, EndTime, ImageID, From , Too, Failed) {
+    this.CreateMovement = function (StartTime, EndTime, ImageID, From, Too, Failed) {
         var Movement = {};
         Movement.StartTime = StartTime;
         Movement.EndTime = EndTime;
@@ -158,7 +172,7 @@ function Session() {
 
 function getLocalStorage() {
     try {
-        if ( !! window.localStorage ) return window.localStorage;
+        if (!!window.localStorage) return window.localStorage;
         else return undefined;
     } catch (e) {
         return undefined;

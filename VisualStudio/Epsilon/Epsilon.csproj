@@ -77,6 +77,7 @@
     <Content Include="contents\css\jquery-ui.structure.min.css" />
     <Content Include="contents\css\jquery-ui.theme.css" />
     <Content Include="contents\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="contents\images\background.png" />
     <Content Include="contents\images\image1.jpg" />
     <Content Include="contents\images\image2.jpg" />
     <Content Include="contents\images\image3.jpg" />

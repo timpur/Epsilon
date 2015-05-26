@@ -93,6 +93,8 @@
     <Content Include="contents\js\jquery.ui.touch-punch.min.js" />
     <Content Include="contents\js\Level3.js" />
     <Content Include="contents\js\Level2.js" />
+    <Content Include="export.html" />
+    <Content Include="import.html" />
     <Content Include="index.html" />
     <Content Include="level1.html" />
     <Content Include="Level3.html" />

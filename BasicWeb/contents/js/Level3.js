@@ -11,15 +11,14 @@ var StartTime = null;
 var EndTime = null;
 var ImageOrder = [];
 var DynamicImageOrder = [];
-var Sublevels = ["A", "B"]; //sublevels for level 2 (2 sublevels)
+var Sublevels = ["A"]; //sublevels for level 3 (1 sublevels)
 var sound1 = new Audio("http://www.freesfx.co.uk/rx2/mp3s/3/4004_1329515672.mp3");
 var app = angular.module('epsilon', ['ngDragDrop']);
 var randomMessages = ["WOW! You are the best player ever", "Keep it up, I'm proud of you", "You deserve a candy, go ask your mum for one", "Determination is the key to success, Good work!", "Keep up the good work", "I’m impressed of your intelligence", "That deserves an ice-cream"];
 var GoClicks = 0;
-var GoClicksLimit = 0;
+var GoClicksLimit = 100;
 
 $(document).ready(function () {
-    $("#theModal").modal({ backdrop: false, keyboard: false, show: false });
     if (session.Load()) {
         var SubLevelName = GetURLSubLevelData();
         SetUPSubLevel(SubLevelName);
@@ -40,7 +39,7 @@ function SetUPSubLevel(Name) {
     SubLevel = session.CreateSubLevel(Name);
     //Displays the Images according to the sub level and the number of inputs
     DisplaySubLevel();
-    SetNumInputs();
+    //SetNumInputs();
 }
 
 function SaveSubLevel(Success) {
@@ -48,7 +47,7 @@ function SaveSubLevel(Success) {
     EndTime = new Date() // set the end time of level now;
     var imageIds = { "static": ImageOrder, "dynamic": DynamicImageOrder };
     session.SetSubLevelDetails(SubLevel, StartTime, EndTime, Success, imageIds);
-    session.AddSubLevel(SubLevel, 2);
+    session.AddSubLevel(SubLevel, 3);
     session.Save();
 }
 
@@ -70,10 +69,104 @@ app.run(function ($rootScope) {
 
 app.controller("mainController", function ($scope, $rootScope) {
     SetTitle = function () {
-        $scope.level = "2" + SubLevel.Name.toString().toUpperCase();
+        $scope.level = "3";// + SubLevel.Name.toString().toUpperCase();
         $scope.randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
         $scope.$apply();
     }
+});
+
+app.controller("dropPanelCtrl", function ($scope, $rootScope) {
+    $scope.i = 0;
+    $scope.pi = $scope.i;
+    $scope.codelines = [];
+    $scope.moveQueue = [];
+    $scope.timeLast = null;
+    $scope.onDrop = function (event, data) {
+        if ($scope.timeLast == null) $scope.timeLast = new Date();
+        var itemDroped = data.draggable[0];
+        var codeline = { id: itemDroped.id, text: itemDroped.textContent };
+        $scope.codelines.push(codeline);
+        var move = DecodeCommand(codeline, $scope);
+        if (move != null) {
+            var start = $scope.timeLast;
+            var end = new Date();
+            move.start = start;
+            move.end = end;
+            $scope.moveQueue.push(move);
+            $scope.timeLast = end;
+        } else {
+            if ($scope.timeLast == null) $scope.timeLast = new Date();
+        }
+    };
+    $scope.go = function () {
+        setTimeout(function () {
+            Movement($scope.moveQueue);
+        }, 0);
+    }
+});
+
+function DecodeCommand(cmd, scope) {
+    var cmd = cmd.id;
+    cmd = cmd.split('~');
+    var staticMove = {};
+    if (cmd[0] == "m") {
+        var num1 = -1;
+        var num2 = -1;
+        if (cmd[1].contains("i")) {
+            num1 = convertItoNum(cmd[1], scope.i);
+        }
+        else {
+            num1 = Number(cmd[1]);
+        }
+        if (cmd[2].contains("i")) {
+            num2 = convertItoNum(cmd[2], scope.i);
+        }
+        else {
+            num2 = Number(cmd[2]);
+        }
+        staticMove.image = num1;
+        staticMove.to = num2;
+    } else if (cmd[0] == "i") {
+        scope.pi = scope.i;
+        scope.i = Number(cmd[1]);
+        return null;
+    }
+    return staticMove;
+}
+function convertItoNum(Icmd, Ival) {
+    if (Icmd == "i") {
+        return Ival;
+    } else if (Icmd == "i-1") {
+        return Ival - 1;
+
+    } else if (Icmd == "i+1") {
+        return Ival + 1;
+    }
+    return -1;
+}
+
+app.controller("pickPanelCtrl", function ($scope, $rootScope) {
+    $scope.codelines = [
+        { id: "i~0", text: "i <- 0" },
+        { id: "i~1", text: "i <- 1" },
+        { id: "i~3", text: "i <- 3" },
+        { id: "i~4", text: "i <- 4" },
+        { id: "m~1~4", text: "move 1 to 4" },
+        { id: "m~2~4", text: "move 2 to 4" },
+        { id: "m~3~4", text: "move 3 to 4" },
+        { id: "m~4~1", text: "move 4 to 1" },
+        { id: "m~i~i-1", text: "move i to i-1" },
+        { id: "m~i~i+1", text: "move i to i+1" },
+        { id: "m~i-1~i", text: "move i-1 to i" },
+        { id: "m~i+1~i", text: "move i+1 to i" }
+    ];
+    $scope.onStart = function (event, data) {
+        var itemDrag = data.helper[0];
+        $(itemDrag).css("width", "115");
+    };
+    $scope.onStop = function (event, data) {
+        var itemDrag = data.helper[0];
+    };
 });
 
 app.controller("staticImages", function ($scope, $rootScope) {
@@ -121,7 +214,7 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
                 addMovement(start, end, image.ID, from, to, true);
                 return false;
             }
-
+            
             var newPos = FindImageBasedOffPos(to);
             if (newPos.isImage != true) {
                 // Image can be moved
@@ -183,19 +276,19 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             // option to restart level if reached max numbers of tries
             setTimeout(function () {
                 SaveSubLevel(false)
-                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/><br/> You can Retry.");
+                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
                 $("#theModal").find("#close").hide();
                 $("#theModal").modal('show');
                 $("#theModal").on('hidden.bs.modal', function () {
                     window.location = "/index.html";
                 });
-            }, 0);
+            }, 1000);
         }
     }
 
 });
 
-app.controller("NumControler", function ($scope, $rootScope) {
+/*app.controller("NumControler", function ($scope, $rootScope) {
     $scope.NumInputs = 0;
     $scope.inputs = [];
     SetNumInputs = function () {
@@ -203,10 +296,10 @@ app.controller("NumControler", function ($scope, $rootScope) {
         var num = 0;
         if (SublevelNum == 0) {
             num = 1;
-            GoClicksLimit = 10;
+            GoClicksLimit = 5;
         }
         else if (SublevelNum == 1) {
-            num = 7;
+            num = 5;
             GoClicksLimit = 1;
         }
         $scope.NumInputs = num;
@@ -223,8 +316,8 @@ app.controller("NumControler", function ($scope, $rootScope) {
         for (var i = 0; i < $scope.inputs.length; i++) {
             if ($scope.inputs[i].select != null || $scope.inputs[i].to != null)
                 queue.push({
-                    image: isNaN($scope.inputs[i].select) ? -1 : $scope.inputs[i].select,
-                    to: isNaN($scope.inputs[i].to) ? -1 : $scope.inputs[i].to,
+                    image: $scope.inputs[i].select,
+                    to: $scope.inputs[i].to,
                     start: $scope.inputs[i].start,
                     end: $scope.inputs[i].end
                 });
@@ -233,9 +326,7 @@ app.controller("NumControler", function ($scope, $rootScope) {
             $scope.inputs[i].start = null;
             $scope.inputs[i].end = null;
         }
-        setTimeout(function () {
-            Movement(queue);
-        }, 0);
+        Movement(queue);
     }
     $scope.onChange = function (index) {
         if (StartTime == null) StartTime = new Date();
@@ -244,7 +335,7 @@ app.controller("NumControler", function ($scope, $rootScope) {
             if ($scope.inputs[index - 1].end == null) $scope.inputs[index - 1].end = new Date();
         }
     }
-});
+});*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------*/
@@ -282,11 +373,11 @@ function gotToNextLevel() {
         $("#theModal").find("#close").text("Next Level");
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "level2.html?sublevel=" + Sublevels[subLNumber + 1];
+            window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
         });
     } else {
         sound1.play();
-        $("#modalContent").html("You Have finished level 2");
+        $("#modalContent").html("You Have finished level 3");
         $("#theModal").find("#close").hide();
         $("#theModal").modal('show');
         $("#theModal").on('hidden.bs.modal', function () {
@@ -340,17 +431,17 @@ function OrderImages(rootScope) {
     rootImages = rootScope.rootImages;
     if (SubLevel) {
         switch (String(SubLevel.Name).toUpperCase()) {
-            case "A": //level 2A shift images to the left
+            case "A": //level 3A shift images to the left
                 temp = order.shift();
                 order.push(temp);
                 break;
-            case "B": //level 2B shift images to the right
-            default: //there is no level 2C so 2B is also the default-one
-                temp = order.pop();
-                order.unshift(temp);
-                break;
-                //default://level 2C reverse order (there is no level 2C for now)
-                //    order.reverse();
+            //case "B": //level 3B shift images to the right
+            //default: //there is no level 3C so 3B is also the default-one
+            //    temp = order.pop();
+            //    order.unshift(temp);
+            //    break;
+            //default://level 3C reverse order (there is no level 3C for now)
+            //    order.reverse();
         }
     }
     DynamicImageOrder = order;
@@ -416,3 +507,5 @@ Array.prototype.isEqualTo = function (arrayB) {
 Array.prototype.clone = function () {
     return this.slice(0);
 };
+
+String.prototype.contains = function(it) { return this.indexOf(it) != -1; };

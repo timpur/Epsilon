@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="contents/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="contents/css/jquery-ui.min.css" rel="stylesheet" />
+    <link href="contents/css/jquery-ui.structure.min.css" rel="stylesheet" />
+    <link href="contents/css/jquery-ui.theme.css" rel="stylesheet" />
+    <link href="contents/css/epsilon.css" rel="stylesheet" />
+
+    <script src="contents/js/jquery-2.1.3.min.js"></script>
+    <script src="contents/js/jquery-ui.min.js"></script>
+    <script src="contents/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="contents/js/bootstrap.min.js"></script>
+    <script src="contents/js/angular.min.js"></script>
+    <script src="contents/js/angular-dragdrop.min.js"></script>
+    <script src="contents/js/epsilon.js"></script>
+    <script src="contents/js/results.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        $('#exportJSON').html(session.Export());
+    });
+
+    </script>
+</head>
+<body ng-app="results" ng-controller="mainController" class="databody">
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="text-center">Export data from this session</h1>
+            <p>
+                This is the data recorded in the background. You can copy the data and paste it into an email.
+            </p>
+            <p>Instructions:</p>
+            <ol>
+                <li>Highlight all of the content in the table below</li>
+                <li>Copy the content</li>
+                <li>Paste the content into an email</li>
+            </ol>
+        </div>
+        <p><a href="results.html" class="btn btn-primary">Back to Results</a></p>
+
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td>
+                        Session ID: {{session.ID}}, Supervisor ID: {{session.Supervisor.ID}}, Child ID: {{session.Child.ID}}, Child Age: {{session.Child.Age}}, Date: {{session.Date | date}}
+                    </td>
+                </tr>
+                <tr ng-repeat="level in session.Levels">
+                    <td>
+                        <p>{{level.Name}}
+                        <div ng-repeat="sublevel in level.SubLevels">
+                            Sublevel {{sublevel.Name}}, Start Time: {{sublevel.StartTime | date:'h:mm:ss a'}}, End Time: {{sublevel.EndTime | date:'h:mm:ss a'}}, Success: <span ng-if="sublevel.Success">Yes</span> <span ng-if="!sublevel.Success">No</span>
+                            <div>
+                                Move Number, Image ID, From, To, Movement Outcome, Start, End, Time Taken<br />
+                                <div ng-repeat="movement in sublevel.Movements">
+                                    {{$index + 1}}, {{movement.ImageID}}, {{movement.From}}, {{movement.Too}}, {{movement.Failed? "Fail":"Success"}}, {{movement.StartTime | date:'h:mm:ss:sss a'}}, {{movement.EndTime | date:'h:mm:ss:sss a'}}, {{TimeDiff(movement.StartTime,movement.EndTime)}} Milliseconds
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>JSON Data used to replay sessions</h2>
+        <p><textarea cols="160" rows="10" id="exportJSON"></textarea></p>
+
+        <p><a href="results.html" class="btn btn-primary">Back to Results</a></p>
+    </div>
+</body>
+</html>

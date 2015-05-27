@@ -105,52 +105,12 @@ app.controller("dropPanelCtrl", function ($scope, $rootScope) {
     }
 });
 
-function DecodeCommand(cmd, scope) {
-    var cmd = cmd.id;
-    cmd = cmd.split('~');
-    var staticMove = {};
-    if (cmd[0] == "m") {
-        var num1 = -1;
-        var num2 = -1;
-        if (cmd[1].contains("i")) {
-            num1 = convertItoNum(cmd[1], scope.i);
-        }
-        else {
-            num1 = Number(cmd[1]);
-        }
-        if (cmd[2].contains("i")) {
-            num2 = convertItoNum(cmd[2], scope.i);
-        }
-        else {
-            num2 = Number(cmd[2]);
-        }
-        staticMove.image = num1;
-        staticMove.to = num2;
-    } else if (cmd[0] == "i") {
-        scope.pi = scope.i;
-        scope.i = Number(cmd[1]);
-        return null;
-    }
-    return staticMove;
-}
-function convertItoNum(Icmd, Ival) {
-    if (Icmd == "i") {
-        return Ival;
-    } else if (Icmd == "i-1") {
-        return Ival - 1;
-
-    } else if (Icmd == "i+1") {
-        return Ival + 1;
-    }
-    return -1;
-}
-
 app.controller("pickPanelCtrl", function ($scope, $rootScope) {
     $scope.codelines = [
-        { id: "i~0", text: "i <- 0" },
-        { id: "i~1", text: "i <- 1" },
-        { id: "i~3", text: "i <- 3" },
-        { id: "i~4", text: "i <- 4" },
+        { id: "i~add", text: "add 1 to i" },
+        { id: "i~subtract", text: "subtract 1 to i" },
+        { id: "i~1", text: "set i to 1" },
+        { id: "i~3", text: "set i to 3" },
         { id: "m~1~4", text: "move 1 to 4" },
         { id: "m~2~4", text: "move 2 to 4" },
         { id: "m~3~4", text: "move 3 to 4" },
@@ -288,57 +248,56 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
 
 });
 
-/*app.controller("NumControler", function ($scope, $rootScope) {
-    $scope.NumInputs = 0;
-    $scope.inputs = [];
-    SetNumInputs = function () {
-        var SublevelNum = getSublevelNumber();
-        var num = 0;
-        if (SublevelNum == 0) {
-            num = 1;
-            GoClicksLimit = 5;
-        }
-        else if (SublevelNum == 1) {
-            num = 5;
-            GoClicksLimit = 1;
-        }
-        $scope.NumInputs = num;
-        for (var i = 0; i < num; i++) {
-            $scope.inputs.push({ select: null, to: null, start: null, end: null });
-        }
-    }
-    $scope.Go = function () {
-        GoClicks += 1;
-        if (StartTime == null) {
-            StartTime = new Date();
-        }
-        var queue = [];
-        for (var i = 0; i < $scope.inputs.length; i++) {
-            if ($scope.inputs[i].select != null || $scope.inputs[i].to != null)
-                queue.push({
-                    image: $scope.inputs[i].select,
-                    to: $scope.inputs[i].to,
-                    start: $scope.inputs[i].start,
-                    end: $scope.inputs[i].end
-                });
-            $scope.inputs[i].select = null;
-            $scope.inputs[i].to = null;
-            $scope.inputs[i].start = null;
-            $scope.inputs[i].end = null;
-        }
-        Movement(queue);
-    }
-    $scope.onChange = function (index) {
-        if (StartTime == null) StartTime = new Date();
-        if ($scope.inputs[index].start == null) $scope.inputs[index].start = new Date();
-        if (index > 0) {
-            if ($scope.inputs[index - 1].end == null) $scope.inputs[index - 1].end = new Date();
-        }
-    }
-});*/
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------*/
+function DecodeCommand(cmd, scope) {
+    var cmd = cmd.id;
+    cmd = cmd.split('~');
+    var staticMove = {};
+    if (cmd[0] == "m") {
+        var num1 = -1;
+        var num2 = -1;
+        if (cmd[1].contains("i")) {
+            num1 = convertItoNum(cmd[1], scope.i);
+        }
+        else {
+            num1 = Number(cmd[1]);
+        }
+        if (cmd[2].contains("i")) {
+            num2 = convertItoNum(cmd[2], scope.i);
+        }
+        else {
+            num2 = Number(cmd[2]);
+        }
+        staticMove.image = num1;
+        staticMove.to = num2;
+    } else if (cmd[0] == "i") {
+        scope.pi = scope.i;
+        if (cmd[1] == "add") {
+            scope.i++;
+        } else if (cmd[1] == "subtract") {
+            scope.i--;
+        } else {
+            scope.i = Number(cmd[1]);
+        }
+        return null;
+    }
+    return staticMove;
+}
+
+function convertItoNum(Icmd, Ival) {
+    if (Icmd == "i") {
+        return Ival;
+    } else if (Icmd == "i-1") {
+        return Ival - 1;
+
+    } else if (Icmd == "i+1") {
+        return Ival + 1;
+    }
+    return -1;
+}
+
 function resetImageStyles(images) {
     for (var i = 0; i < images.length; i++) {
         images[i].style = "";

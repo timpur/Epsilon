@@ -20,9 +20,9 @@ app.run(function ($rootScope) {
 
     // This is where image locations and id are located and will be coppeid for use in controllers 
     $rootScope.rootImages = [
-        { ID: 1, name: "", src: "contents/images/image4.jpg" },
-        { ID: 2, name: "", src: "contents/images/image5.jpg" },
-        { ID: 3, name: "", src: "contents/images/image6.jpg" }
+        { ID: 1, name: "", src: "contents/images/image1.jpg" },
+        { ID: 2, name: "", src: "contents/images/image2.jpg" },
+        { ID: 3, name: "", src: "contents/images/image3.jpg" }
     ];
     if (session.Load()) {
         theSession = session.Session;
@@ -37,7 +37,7 @@ app.run(function ($rootScope) {
 });
 
 app.controller("mainController", function ($scope, $rootScope) {
-   
+
 });
 
 app.controller("replayControler", function ($scope, $rootScope) {
@@ -97,7 +97,7 @@ app.controller("replayImages", function ($scope, $rootScope) {
         // push another object that is empty for the blank space
         $scope.images.push({});
     }
-    $scope.OrderImages(); 
+    $scope.OrderImages();
 
     playMove = function (id, direction) {
         var searchImagePos = function (id) {
@@ -153,7 +153,7 @@ function animationString(to, from, reverse) {
         'animation': animation,
         '-webkit-animation': animation,
         '-moz-animation': animation,
-        'z-index':index
+        'z-index': index
     }
     return fullAnimation;
 }
@@ -202,7 +202,7 @@ function orderDynamicImgs(imagesArray) {
 
 //returns an image object based on its ID.
 function getImage(array, id) {
-    for (var i=0; i<array.length; i++) {
+    for (var i = 0; i < array.length; i++) {
         if (array[i].ID == id) {
             return array[i];
         }

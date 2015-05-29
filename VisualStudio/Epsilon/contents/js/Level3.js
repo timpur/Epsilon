@@ -17,6 +17,7 @@ var app = angular.module('epsilon', ['ngDragDrop']);
 var randomMessages = ["WOW! You are the best player ever", "Keep it up, I'm proud of you", "You deserve a candy, go ask your mum for one", "Determination is the key to success, Good work!", "Keep up the good work", "I’m impressed of your intelligence", "That deserves an ice-cream"];
 var GoClicks = 0;
 var GoClicksLimit = 100;
+var isPractise = false;
 
 $(document).ready(function () {
     if (session.Load()) {
@@ -31,7 +32,13 @@ $(document).ready(function () {
 function GetURLSubLevelData() {
     var urldata = parseURLParams(window.location.href);
     var SubLevel = urldata["sublevel"][0];
-    return SubLevel;
+    isPractise = urldata["practise"];
+    if (isPractise) { //if isPractise is not undefined
+        return (SubLevel + " (Practise)");
+    } else { //if isPractise is undefined (or false)
+        isPractise = false;
+        return SubLevel;
+    }
 }
 
 function SetUPSubLevel(Name) {
@@ -69,7 +76,7 @@ app.run(function ($rootScope) {
 
 app.controller("mainController", function ($scope, $rootScope) {
     SetTitle = function () {
-        $scope.level = "3";// + SubLevel.Name.toString().toUpperCase();
+        $scope.level = isPractise?"3 (PRACTISE)":"3";
         $scope.randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
         $scope.$apply();
     }
@@ -232,17 +239,19 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             SaveSubLevel(true);
             gotToNextLevel();
         }
-        else if (GoClicks >= GoClicksLimit) {
-            // option to restart level if reached max numbers of tries
-            setTimeout(function () {
-                SaveSubLevel(false)
-                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
-                $("#theModal").find("#close").hide();
-                $("#theModal").modal('show');
-                $("#theModal").on('hidden.bs.modal', function () {
-                    window.location = "/index.html";
-                });
-            }, 1000);
+        else if (!isPractise) {
+            if (GoClicks >= GoClicksLimit) {
+                // option to restart level if reached max numbers of tries
+                setTimeout(function () {
+                    SaveSubLevel(false)
+                    $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/><br/> You can Retry.");
+                    $("#theModal").find("#close").hide();
+                    $("#theModal").modal('show');
+                    $("#theModal").on('hidden.bs.modal', function () {
+                        window.location = "/index.html";
+                    });
+                }, 1000);
+            }
         }
     }
 
@@ -325,32 +334,39 @@ function animationString(to, from, reverse) {
 }
 
 function gotToNextLevel() {
-    var subLNumber = getSublevelNumber();
-    if (subLNumber < Sublevels.length - 1) {
-        sound1.play();
-        $("#theModal").find("#close").show();
-        $("#theModal").find("#close").text("Next Level");
-        $("#theModal").modal('show');
-        $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
-        });
-    } else {
-        sound1.play();
-        $("#modalContent").html("You Have finished level 3");
-        $("#theModal").find("#close").hide();
-        $("#theModal").modal('show');
-        $("#theModal").on('hidden.bs.modal', function () {
+    if (isPractise) {
+        $("#thePractiseModal").modal('show');
+        $("#thePractiseModal").on('hidden.bs.modal', function () {
             window.location = "/index.html";
         });
+    } else {
+        var subLNumber = getSublevelNumber();
+        if (subLNumber < Sublevels.length - 1) {
+            sound1.play();
+            $("#theModal").find("#close").show();
+            $("#theModal").find("#close").text("Next Level");
+            $("#theModal").modal('show');
+            $("#theModal").on('hidden.bs.modal', function () {
+                window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
+            });
+        } else {
+            sound1.play();
+            $("#modalContent").html("You Have finished level 3");
+            $("#theModal").find("#close").hide();
+            $("#theModal").modal('show');
+            $("#theModal").on('hidden.bs.modal', function () {
+                window.location = "/index.html";
+            });
+        }
     }
 }
 
 //returns 0 if Sublevel is 'a' or 'A', 1 if 'b' or 'B', 2 if 'c' or 'C'
 function getSublevelNumber() {
     if (SubLevel) {
-        if (String(SubLevel.Name).toUpperCase() == "A") return 0;
-        if (String(SubLevel.Name).toUpperCase() == "B") return 1;
-        if (String(SubLevel.Name).toUpperCase() == "C") return 2;
+        if (String(SubLevel.Name).toUpperCase().split(" ")[0] == "A") return 0;
+        if (String(SubLevel.Name).toUpperCase().split(" ")[0] == "B") return 1;
+        if (String(SubLevel.Name).toUpperCase().split(" ")[0] == "C") return 2;
     }
     else return 0;
 }
@@ -389,7 +405,7 @@ function OrderImages(rootScope) {
     var temp;
     rootImages = rootScope.rootImages;
     if (SubLevel) {
-        switch (String(SubLevel.Name).toUpperCase()) {
+        switch (String(SubLevel.Name).toUpperCase().split(" ")[0]) {
             case "A": //level 3A shift images to the left
                 temp = order.shift();
                 order.push(temp);

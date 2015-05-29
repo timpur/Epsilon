@@ -37,6 +37,19 @@ div, img {
     border-top-right-radius: 5px;
 }
 
+.modal-header-info {
+    color: #fff;
+    padding: 9px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #6f5499;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
 #titleDiv {
     width: 100%;
     text-align: center;
@@ -61,6 +74,39 @@ div, img {
     #nav a {
         width: 250px;
     }
+
+.theNavTabs {
+    display: inline-block;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.nav-tabs>li>a.theNavLinks {
+    color: #fff;
+  background-color: #f0ad4e;
+}
+
+.nav-tabs>li>a.theNavLinks:hover {
+      color: #fff;
+  background-color: #ec971f;
+}
+
+.nav-tabs>li>a.theNavLinks:active {
+      color: #fff;
+  background-color: #ec971f;
+}
+
+.nav-tabs>li.active>a.theNavLinks, .nav-tabs>li.active>a.theNavLinks:focus, .nav-tabs>li.active>a.theNavLinks:hover {
+    color: #fff;
+  background-color: #ec971f;
+}
+
+.intForm.active {
+    display: inline-block;
+  border: solid;
+  border-color: aqua;
+  padding: 10px;
+}
 
 
 #mainContainer {

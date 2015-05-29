@@ -17,33 +17,49 @@
         <p><u> Menu </u></p>
     </div>
     <div id="nav">
-        <dl>
-            <dt><span id="text"></span></dt>
-            <dt><a id="Form" class="btn btn-lg" href="Form.html">Form</a></dt>
-            <dt><a id="1A" class="btn btn-info btn-lg" href="level1.html?sublevel=a">Level 1A</a></dt>
-            <dt><a id="1B" class="btn btn-info btn-lg" href="level1.html?sublevel=b">Level 1B</a></dt>
-            <dt><a id="1C" class="btn btn-info btn-lg" href="level1.html?sublevel=c">Level 1C</a></dt>
-            <dt><a id="2A" class="btn btn-info btn-lg" href="Level2.html?sublevel=a">Level 2A</a></dt>
-            <dt><a id="2B" class="btn btn-info btn-lg" href="Level2.html?sublevel=b">Level 2B</a></dt>            
-            <dt><a id="3A" class="btn btn-info btn-lg" href="Level3.html?sublevel=a">Level 3A</a></dt>
-            <dt><a id="R" class="btn btn-success btn-lg" href="results.html">Current Results</a></dt>
-        </dl>
+        <div class="intForm">
+            <div id="textForm"></div>
+            <div><a id="Form" class="btn btn-lg" href="Form.html">Form</a></div>
+        </div>
+        <div><a id="R" class="btn btn-success btn-lg" href="results.html">Current Results</a></div>
 
-    </div>
+        <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs theNavTabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" class="theNavLinks">Real Levels</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" class="theNavLinks">Practise Levels</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                            <div><a id="1A" class="theLevels btn btn-info btn-lg" href="level1.html?sublevel=a">Level 1A</a></div>
+                            <div><a id="1B" class="theLevels btn btn-info btn-lg" href="level1.html?sublevel=b">Level 1B</a></div>
+                            <div><a id="1C" class="theLevels btn btn-info btn-lg" href="level1.html?sublevel=c">Level 1C</a></div>
+                            <div><a id="2A" class="theLevels btn btn-info btn-lg" href="Level2.html?sublevel=a">Level 2A</a></div>
+                            <div><a id="2B" class="theLevels btn btn-info btn-lg" href="Level2.html?sublevel=b">Level 2B</a></div>
+                            <div><a id="3A" class="theLevels btn btn-info btn-lg" href="Level3.html?sublevel=a">Level 3</a></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <div><a id="1AT" class="theLevels btn btn-info btn-lg" href="level1.html?sublevel=a&practise=true">Practise Level 1</a></div>
+                    <div><a id="2AT" class="theLevels btn btn-info btn-lg" href="Level2.html?sublevel=a&practise=true">Practise Level 2A</a></div>
+                    <div><a id="2BT" class="theLevels btn btn-info btn-lg" href="Level2.html?sublevel=b&practise=true">Practise Level 2B</a></div>
+                    <div><a id="3AT" class="theLevels btn btn-info btn-lg" href="Level3.html?sublevel=a&practise=true">Practise Level 3</a></div>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+    
 </body>
 </html>
 <script>
     $(document).ready(function () {
         if (!session.SessionExists()) {
             $("#Form").addClass("btn-warning");
-            $("#1A").attr("disabled", "disabled");
-            $("#1B").attr("disabled", "disabled");
-            $("#1C").attr("disabled", "disabled");
-            $("#2A").attr("disabled", "disabled");
-            $("#2B").attr("disabled", "disabled");
-            $("#3A").attr("disabled", "disabled");
-            //$("#R").attr("disabled", "disabled");
-            $("#text").text("Please Fill in Form First");
+            $(".theLevels").attr("disabled", "disabled");
+            $("#textForm").text("Please Fill in Form First");
+            $(".intForm").addClass("active");
+            $("#R").attr("disabled", "disabled");
         }
         else {
             $("#Form").addClass("btn-success");

@@ -17,6 +17,7 @@ var app = angular.module('epsilon', ['ngDragDrop']);
 var randomMessages = ["WOW! You are the best player ever", "Keep it up, I'm proud of you", "You deserve a candy, go ask your mum for one", "Determination is the key to success, Good work!", "Keep up the good work", "I’m impressed of your intelligence", "That deserves an ice-cream"];
 var GoClicks = 0;
 var GoClicksLimit = 100;
+var isPractise = false;
 
 $(document).ready(function () {
     if (session.Load()) {
@@ -31,7 +32,13 @@ $(document).ready(function () {
 function GetURLSubLevelData() {
     var urldata = parseURLParams(window.location.href);
     var SubLevel = urldata["sublevel"][0];
-    return SubLevel;
+    isPractise = urldata["practise"];
+    if (isPractise) { //if isPractise is not undefined
+        return (SubLevel + " (Practise)");
+    } else { //if isPractise is undefined (or false)
+        isPractise = false;
+        return SubLevel;
+    }
 }
 
 function SetUPSubLevel(Name) {
@@ -69,7 +76,7 @@ app.run(function ($rootScope) {
 
 app.controller("mainController", function ($scope, $rootScope) {
     SetTitle = function () {
-        $scope.level = "3";// + SubLevel.Name.toString().toUpperCase();
+        $scope.level = isPractise?"3 (PRACTISE)":"3";
         $scope.randomMessage = randomMessages[Math.floor(Math.random() * randomMessages.length)];
         $scope.$apply();
     }
@@ -105,52 +112,12 @@ app.controller("dropPanelCtrl", function ($scope, $rootScope) {
     }
 });
 
-function DecodeCommand(cmd, scope) {
-    var cmd = cmd.id;
-    cmd = cmd.split('~');
-    var staticMove = {};
-    if (cmd[0] == "m") {
-        var num1 = -1;
-        var num2 = -1;
-        if (cmd[1].contains("i")) {
-            num1 = convertItoNum(cmd[1], scope.i);
-        }
-        else {
-            num1 = Number(cmd[1]);
-        }
-        if (cmd[2].contains("i")) {
-            num2 = convertItoNum(cmd[2], scope.i);
-        }
-        else {
-            num2 = Number(cmd[2]);
-        }
-        staticMove.image = num1;
-        staticMove.to = num2;
-    } else if (cmd[0] == "i") {
-        scope.pi = scope.i;
-        scope.i = Number(cmd[1]);
-        return null;
-    }
-    return staticMove;
-}
-function convertItoNum(Icmd, Ival) {
-    if (Icmd == "i") {
-        return Ival;
-    } else if (Icmd == "i-1") {
-        return Ival - 1;
-
-    } else if (Icmd == "i+1") {
-        return Ival + 1;
-    }
-    return -1;
-}
-
 app.controller("pickPanelCtrl", function ($scope, $rootScope) {
     $scope.codelines = [
-        { id: "i~0", text: "i <- 0" },
-        { id: "i~1", text: "i <- 1" },
-        { id: "i~3", text: "i <- 3" },
-        { id: "i~4", text: "i <- 4" },
+        { id: "i~add", text: "add 1 to i" },
+        { id: "i~subtract", text: "subtract 1 to i" },
+        { id: "i~1", text: "set i to 1" },
+        { id: "i~3", text: "set i to 3" },
         { id: "m~1~4", text: "move 1 to 4" },
         { id: "m~2~4", text: "move 2 to 4" },
         { id: "m~3~4", text: "move 3 to 4" },
@@ -272,73 +239,74 @@ app.controller("moveImages", function ($scope, $rootScope, $filter) {
             SaveSubLevel(true);
             gotToNextLevel();
         }
-        else if (GoClicks >= GoClicksLimit) {
-            // option to restart level if reached max numbers of tries
-            setTimeout(function () {
-                SaveSubLevel(false)
-                $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/> You can Retry.");
-                $("#theModal").find("#close").hide();
-                $("#theModal").modal('show');
-                $("#theModal").on('hidden.bs.modal', function () {
-                    window.location = "/index.html";
-                });
-            }, 1000);
+        else if (!isPractise) {
+            if (GoClicks >= GoClicksLimit) {
+                // option to restart level if reached max numbers of tries
+                setTimeout(function () {
+                    SaveSubLevel(false)
+                    $("#modalContent").html("You Have Reached The Max Number Of Turns For This Level. <br/><br/> You can Retry.");
+                    $("#theModal").find("#close").hide();
+                    $("#theModal").modal('show');
+                    $("#theModal").on('hidden.bs.modal', function () {
+                        window.location = "/index.html";
+                    });
+                }, 1000);
+            }
         }
     }
 
 });
 
-/*app.controller("NumControler", function ($scope, $rootScope) {
-    $scope.NumInputs = 0;
-    $scope.inputs = [];
-    SetNumInputs = function () {
-        var SublevelNum = getSublevelNumber();
-        var num = 0;
-        if (SublevelNum == 0) {
-            num = 1;
-            GoClicksLimit = 5;
-        }
-        else if (SublevelNum == 1) {
-            num = 5;
-            GoClicksLimit = 1;
-        }
-        $scope.NumInputs = num;
-        for (var i = 0; i < num; i++) {
-            $scope.inputs.push({ select: null, to: null, start: null, end: null });
-        }
-    }
-    $scope.Go = function () {
-        GoClicks += 1;
-        if (StartTime == null) {
-            StartTime = new Date();
-        }
-        var queue = [];
-        for (var i = 0; i < $scope.inputs.length; i++) {
-            if ($scope.inputs[i].select != null || $scope.inputs[i].to != null)
-                queue.push({
-                    image: $scope.inputs[i].select,
-                    to: $scope.inputs[i].to,
-                    start: $scope.inputs[i].start,
-                    end: $scope.inputs[i].end
-                });
-            $scope.inputs[i].select = null;
-            $scope.inputs[i].to = null;
-            $scope.inputs[i].start = null;
-            $scope.inputs[i].end = null;
-        }
-        Movement(queue);
-    }
-    $scope.onChange = function (index) {
-        if (StartTime == null) StartTime = new Date();
-        if ($scope.inputs[index].start == null) $scope.inputs[index].start = new Date();
-        if (index > 0) {
-            if ($scope.inputs[index - 1].end == null) $scope.inputs[index - 1].end = new Date();
-        }
-    }
-});*/
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------*/
 
-/*-----------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------*/
+function DecodeCommand(cmd, scope) {
+    var cmd = cmd.id;
+    cmd = cmd.split('~');
+    var staticMove = {};
+    if (cmd[0] == "m") {
+        var num1 = -1;
+        var num2 = -1;
+        if (cmd[1].contains("i")) {
+            num1 = convertItoNum(cmd[1], scope.i);
+        }
+        else {
+            num1 = Number(cmd[1]);
+        }
+        if (cmd[2].contains("i")) {
+            num2 = convertItoNum(cmd[2], scope.i);
+        }
+        else {
+            num2 = Number(cmd[2]);
+        }
+        staticMove.image = num1;
+        staticMove.to = num2;
+    } else if (cmd[0] == "i") {
+        scope.pi = scope.i;
+        if (cmd[1] == "add") {
+            scope.i++;
+        } else if (cmd[1] == "subtract") {
+            scope.i--;
+        } else {
+            scope.i = Number(cmd[1]);
+        }
+        return null;
+    }
+    return staticMove;
+}
+
+function convertItoNum(Icmd, Ival) {
+    if (Icmd == "i") {
+        return Ival;
+    } else if (Icmd == "i-1") {
+        return Ival - 1;
+
+    } else if (Icmd == "i+1") {
+        return Ival + 1;
+    }
+    return -1;
+}
+
 function resetImageStyles(images) {
     for (var i = 0; i < images.length; i++) {
         images[i].style = "";
@@ -366,32 +334,39 @@ function animationString(to, from, reverse) {
 }
 
 function gotToNextLevel() {
-    var subLNumber = getSublevelNumber();
-    if (subLNumber < Sublevels.length - 1) {
-        sound1.play();
-        $("#theModal").find("#close").show();
-        $("#theModal").find("#close").text("Next Level");
-        $("#theModal").modal('show');
-        $("#theModal").on('hidden.bs.modal', function () {
-            window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
-        });
-    } else {
-        sound1.play();
-        $("#modalContent").html("You Have finished level 3");
-        $("#theModal").find("#close").hide();
-        $("#theModal").modal('show');
-        $("#theModal").on('hidden.bs.modal', function () {
+    if (isPractise) {
+        $("#thePractiseModal").modal('show');
+        $("#thePractiseModal").on('hidden.bs.modal', function () {
             window.location = "/index.html";
         });
+    } else {
+        var subLNumber = getSublevelNumber();
+        if (subLNumber < Sublevels.length - 1) {
+            sound1.play();
+            $("#theModal").find("#close").show();
+            $("#theModal").find("#close").text("Next Level");
+            $("#theModal").modal('show');
+            $("#theModal").on('hidden.bs.modal', function () {
+                window.location = "level3.html?sublevel=" + Sublevels[subLNumber + 1];
+            });
+        } else {
+            sound1.play();
+            $("#modalContent").html("You Have finished level 3");
+            $("#theModal").find("#close").hide();
+            $("#theModal").modal('show');
+            $("#theModal").on('hidden.bs.modal', function () {
+                window.location = "/index.html";
+            });
+        }
     }
 }
 
 //returns 0 if Sublevel is 'a' or 'A', 1 if 'b' or 'B', 2 if 'c' or 'C'
 function getSublevelNumber() {
     if (SubLevel) {
-        if (String(SubLevel.Name).toUpperCase() == "A") return 0;
-        if (String(SubLevel.Name).toUpperCase() == "B") return 1;
-        if (String(SubLevel.Name).toUpperCase() == "C") return 2;
+        if (String(SubLevel.Name).toUpperCase().split(" ")[0] == "A") return 0;
+        if (String(SubLevel.Name).toUpperCase().split(" ")[0] == "B") return 1;
+        if (String(SubLevel.Name).toUpperCase().split(" ")[0] == "C") return 2;
     }
     else return 0;
 }
@@ -430,7 +405,7 @@ function OrderImages(rootScope) {
     var temp;
     rootImages = rootScope.rootImages;
     if (SubLevel) {
-        switch (String(SubLevel.Name).toUpperCase()) {
+        switch (String(SubLevel.Name).toUpperCase().split(" ")[0]) {
             case "A": //level 3A shift images to the left
                 temp = order.shift();
                 order.push(temp);
